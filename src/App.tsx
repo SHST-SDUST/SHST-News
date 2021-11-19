@@ -7,7 +7,7 @@ import "./vector/styles/asse-style.scss";
 
 const runLoading = () => {
     start();
-    console.log(1111);
+    console.log(222);
     setTimeout(end, 3000);
 };
 const App: FC = () => (
