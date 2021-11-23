@@ -6,7 +6,7 @@ let counter = 0;
 /**
  * start
  */
-export const start = (): void => {
+const start = (): void => {
     if (counter === 0) {
         const container = document.createElement("div");
         container.setAttribute("id", "global-spin-element");
@@ -22,7 +22,7 @@ export const start = (): void => {
 /**
  * end
  */
-export const end = (): void => {
+const end = (): void => {
     counter--;
     if (counter === 0) {
         const loadingNode = document.getElementById("global-spin-element");

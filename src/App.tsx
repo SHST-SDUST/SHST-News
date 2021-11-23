@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { Button } from "antd";
 import "./App.css";
-import { start, end } from "src/modules/loading";
+import loading from "src/modules/loading";
 import "./vector/styles/asse.scss";
 import "./vector/styles/asse-style.scss";
 
 const runLoading = () => {
-    start();
-    console.log(222);
-    setTimeout(end, 3000);
+    loading.start();
+    console.log(333);
+    setTimeout(loading.end, 3000);
 };
 const App: FC = () => (
     <div className="App">
