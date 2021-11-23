@@ -66,7 +66,7 @@ export const request = <T>(requestInfo: RequestInfo) => {
                         }
                         resolve(res.data);
                     } else {
-                        reject("Remote Error");
+                        reject(res.data);
                     }
                 })
                 .finally(() => {
