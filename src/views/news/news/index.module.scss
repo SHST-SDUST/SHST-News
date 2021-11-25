@@ -1,0 +1,13 @@
+$container-height: 50px;
+
+.tab-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $container-height;
+}
+
+.container-gap{
+    height: $container-height;
+}
