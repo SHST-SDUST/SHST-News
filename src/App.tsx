@@ -8,7 +8,7 @@ import { Row, Col } from "antd";
 
 const App: FC = () => (
     <Row justify="center">
-        <Col xs={24} sm={14} md={10} lg={8} xl={6}>
+        <Col xs={24} sm={14} md={10} lg={8} xl={6} className="position-relative">
             <HashRouter>
                 <Routes>
                     <Route path="/*" element={<NewsRouter />}></Route>

@@ -1,3 +1,5 @@
+@import "src/vector/styles/asse.scss";
+
 $container-height: 50px;
 
 .tab-container{
@@ -6,8 +8,22 @@ $container-height: 50px;
     left: 0;
     right: 0;
     height: $container-height;
+    overflow-x: auto;
 }
 
 .container-gap{
     height: $container-height;
+}
+
+.tab-item{
+    padding: 8px 15px;
+    white-space: nowrap;
+}
+
+.tab-item-line{
+    height: 2px;
+}
+
+.tab-item-active{
+    background-color: $a-blue;
 }

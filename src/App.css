@@ -25,3 +25,27 @@
     z-index: -10000;
     opacity: 0;
 }
+
+.position-relative{
+    position: relative;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar{
+    height:4px;
+    width:4px;
+}
+::-webkit-scrollbar-thumb{
+    background: transparent;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover{
+    background: rgba(136, 136, 136, 0.4);
+}
+
+::-webkit-scrollbar-track:hover{
+    background: rgba(136, 136, 136, 0.1);
+}
