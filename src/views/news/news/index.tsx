@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 import Card from "src/components/card";
 import { typeList } from "../common/type-group";
 import styles from "./index.module.scss";
+import { Link } from "react-router-dom";
 
 const TABS = [{ name: "全部", index: 0 }, ...typeList];
 const SUB_TABS = { 4: [{ name: "全部", index: 0 }, ...typeList] };
@@ -15,7 +17,7 @@ const NewsIndex: React.FC = () => {
 
     return (
         <>
-            <div className={"a-y-center a-background-white " + styles["tab-container"]}>
+            <div className={"a-y-center a-background-white a-pointer " + styles["tab-container"]}>
                 <div className="a-y-center a-pl-5 a-pr-5">
                     {TABS.map(item => {
                         return (
@@ -54,6 +56,9 @@ const NewsIndex: React.FC = () => {
                     }
                 ></Card>
             </div>
+            <Link to="publish" className={"a-x-center a-y-center " + styles["new-post-container"]}>
+                <PlusOutlined style={{ fontSize: "20px" }} />
+            </Link>
         </>
     );
 };
