@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import Card from "src/components/card";
-import { typeList } from "../common/type-group";
+import { typeList, getSubTypeList } from "../common/type-group";
 import styles from "./index.module.scss";
 import { Link } from "react-router-dom";
 
 const TABS = [{ name: "全部", index: 0 }, ...typeList];
-const SUB_TABS = { 4: [{ name: "全部", index: 0 }, ...typeList] };
+const SUB_TABS = { 4: [{ name: "全部", index: 0 }, ...getSubTypeList(4)] };
 
 const NewsIndex: React.FC = () => {
     const [activeTabIndex, setActiveTabIndex] = useState(0);

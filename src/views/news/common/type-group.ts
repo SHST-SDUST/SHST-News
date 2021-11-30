@@ -7,7 +7,7 @@ export const typeList = [
     { name: "其他", index: 6 },
 ];
 
-const subTypeListMapper: Record<
+export const subTypeListMapper: Record<
     string,
     {
         name: string;
