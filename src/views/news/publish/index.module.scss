@@ -1,0 +1,14 @@
+.container{
+    padding: 10px;
+}
+
+.image_container{
+    height: 100px;
+    width:  100px;
+    border: 1px solid #eee;
+}
+
+.image_container_hide{
+    @extend .image_container;
+    border: none;
+}

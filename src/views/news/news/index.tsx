@@ -16,7 +16,7 @@ const NewsIndex: React.FC = () => {
     };
 
     return (
-        <>
+        <div className="padding-page">
             <div className={"a-y-center a-background-white a-pointer " + styles["tab-container"]}>
                 <div className="a-y-center a-pl-5 a-pr-5">
                     {TABS.map(item => {
@@ -59,7 +59,7 @@ const NewsIndex: React.FC = () => {
             <Link to="publish" className={"a-x-center a-y-center " + styles["new-post-container"]}>
                 <PlusOutlined style={{ fontSize: "20px" }} />
             </Link>
-        </>
+        </div>
     );
 };
 

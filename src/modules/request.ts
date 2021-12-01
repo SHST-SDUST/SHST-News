@@ -61,7 +61,7 @@ export const request = <T>(requestInfo: RequestInfo) => {
                 .then(res => {
                     if (res.status === 200 && res.data.status) {
                         if (res.data.status === -1 && res.data.msg) {
-                            toast(res.data.msg, 200, "error");
+                            toast(res.data.msg, "error");
                             return void 0;
                         }
                         resolve(res.data);

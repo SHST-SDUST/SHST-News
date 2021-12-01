@@ -6,8 +6,8 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
  */
 export const toast = (
     content: string,
-    time = 2,
-    type: "success" | "error" | "info" | "warn" = "info"
+    type: "success" | "error" | "info" | "warn" = "info",
+    time = 2
 ): Promise<void> => {
     return new Promise(resolve => {
         message[type]({
