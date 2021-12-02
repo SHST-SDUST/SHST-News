@@ -1,6 +1,7 @@
 import React from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Form, Input, Radio, Button, Upload } from "antd";
+import { compressAccurately } from "image-conversion";
 import styles from "./index.module.scss";
 import { typeList, subTypeListMapper } from "../common/type-group";
 import { data } from "src/modules/global-data";
@@ -17,7 +18,11 @@ const NewsPublish = (): JSX.Element => {
     const [levelOneType, setLevelOneType] = React.useState<number>(0);
     const [imagePaths, setImagePaths] = React.useState<{ url: string; path: string }[]>([]);
     const beforeUpload: UploadProps["beforeUpload"] = file => {
-        return Promise.reject(file);
+        return new Promise(resolve => {
+            const limit = file.size / 1024 < 100; // 判断图片是否过大 100kb
+            if (limit) resolve(file);
+            compressAccurately(file, { size: 100, accuracy: 0.9 }).then(res => resolve(res));
+        });
     };
 
     const onFinish: FormProps["onFinish"] = values => {
