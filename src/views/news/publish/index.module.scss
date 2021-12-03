@@ -1,14 +1,19 @@
+$image-matrix: 100px;
+
 .container{
     padding: 10px;
 }
 
 .image_container{
-    height: 100px;
-    width:  100px;
+    height: $image-matrix;
+    width:  $image-matrix;
     border: 1px solid #eee;
+    overflow: hidden;
 }
+
 
 .image_container_hide{
     @extend .image_container;
     border: none;
 }
+

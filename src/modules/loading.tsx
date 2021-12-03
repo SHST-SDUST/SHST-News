@@ -6,13 +6,13 @@ let counter = 0;
 /**
  * start
  */
-const start = (): void => {
+const start = (title = "加载中..."): void => {
     if (counter === 0) {
         const container = document.createElement("div");
         container.setAttribute("id", "global-spin-element");
         document.body.appendChild(container);
         ReactDOM.render(
-            <Spin indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />} tip="加载中..." />,
+            <Spin indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />} tip={title} />,
             container
         );
     }

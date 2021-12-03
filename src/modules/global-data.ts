@@ -21,4 +21,8 @@ export const data: Data = {
     project: "山科小站",
 };
 
+if (process.env.NODE_ENV === "development") {
+    data.url = "/api";
+}
+
 export default { data };

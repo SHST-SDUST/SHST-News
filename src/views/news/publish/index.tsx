@@ -6,6 +6,7 @@ import styles from "./index.module.scss";
 import { typeList, subTypeListMapper } from "../common/type-group";
 import { data } from "src/modules/global-data";
 import { toast } from "src/modules/toast";
+import loading from "src/modules/loading";
 
 type UploadProps = Parameters<typeof Upload>[0];
 type FormProps = Parameters<typeof Form>[0];
@@ -18,10 +19,16 @@ const NewsPublish = (): JSX.Element => {
     const [levelOneType, setLevelOneType] = React.useState<number>(0);
     const [imagePaths, setImagePaths] = React.useState<{ url: string; path: string }[]>([]);
     const beforeUpload: UploadProps["beforeUpload"] = file => {
+        loading.start("上传中...");
         return new Promise(resolve => {
             const limit = file.size / 1024 < 100; // 判断图片是否过大 100kb
             if (limit) resolve(file);
-            compressAccurately(file, { size: 100, accuracy: 0.9 }).then(res => resolve(res));
+            const scale = 200 / (file.size / 1024);
+            compressAccurately(file, {
+                size: 100,
+                accuracy: 0.9,
+                scale: Math.max(0.5, Math.min(1, scale)),
+            }).then(res => resolve(res));
         });
     };
 
@@ -38,7 +45,7 @@ const NewsPublish = (): JSX.Element => {
                     msg?: string;
                     url: string;
                     path: string;
-                } = JSON.parse(event.file.response);
+                } = event.file.response;
                 if (!response.status) {
                     toast("上传失败，请稍后重试");
                 } else if (response.status === -1 && response.msg) {
@@ -47,7 +54,10 @@ const NewsPublish = (): JSX.Element => {
                     setImagePaths([...imagePaths, { url: response.url, path: response.path }]);
                 }
             } catch (error) {
+                console.log(error);
                 toast("上传失败", "error");
+            } finally {
+                loading.end();
             }
         }
     };
@@ -79,7 +89,7 @@ const NewsPublish = (): JSX.Element => {
                 </Form.Item>
                 {SUB_TABS[levelOneType] && (
                     <Form.Item
-                        name="sub-type"
+                        name="sub_type"
                         label="二级类别"
                         rules={[{ required: true, message: "必选" }]}
                     >
@@ -93,22 +103,22 @@ const NewsPublish = (): JSX.Element => {
                     </Form.Item>
                 )}
                 <div className="a-x-center y-center a-flex-space-around">
-                    {imagePaths.map(item => (
+                    {imagePaths.map((item, index) => (
                         <div
-                            key={item.path}
+                            key={index}
                             className={
-                                "a-x-center y-center a-flex-space-around" + styles.image_container
+                                "a-x-center y-center a-flex-space-around " + styles.image_container
                             }
                         >
-                            <img src={item.url} className="show-images" alt="" />
+                            <img src={item.url} alt="" />
                         </div>
                     ))}
                     {imagePaths.length < IMAGE_LENGTH && (
                         <Upload
-                            accept=".jpg,.png"
+                            accept=".jpg"
                             name="image"
                             showUploadList={false}
-                            action={data.url + "/news/uploadImg"}
+                            action={data.url + "/news/publish/uploadImg"}
                             beforeUpload={beforeUpload}
                             onChange={onImageStatusChange}
                             withCredentials={true}
@@ -118,14 +128,15 @@ const NewsPublish = (): JSX.Element => {
                             </div>
                         </Upload>
                     )}
-                    {Array(IMAGE_LENGTH - imagePaths.length - 1)
-                        .fill(null)
-                        .map((_, index) => (
-                            <div key={index} className={styles.image_container_hide}></div>
-                        ))}
+                    {IMAGE_LENGTH - imagePaths.length - 1 > 0 &&
+                        Array(IMAGE_LENGTH - imagePaths.length - 1)
+                            .fill(null)
+                            .map((_, index) => (
+                                <div key={index} className={styles.image_container_hide}></div>
+                            ))}
                 </div>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" block className="a-lmt">
+                    <Button type="primary" htmlType="submit" block className="a-mt-20">
                         提交
                     </Button>
                 </Form.Item>

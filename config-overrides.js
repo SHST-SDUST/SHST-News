@@ -27,5 +27,15 @@ module.exports = {
     ),
     devServer: overrideDevServer(config => ({
         ...config,
+        proxy: {
+            "/api": {
+                target: "http://dev.shstplus.touchczy.top/",
+                changeOrigin: true,
+                secure: false,
+                pathRewrite: {
+                    "^/api": "",
+                },
+            },
+        },
     })),
 };
