@@ -1,26 +1,28 @@
 import React from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Radio, Button, Upload } from "antd";
+import { Form, Input, Radio, Button, Upload, Image, FormProps, UploadProps } from "antd";
 import { compressAccurately } from "image-conversion";
 import styles from "./index.module.scss";
 import { typeList, subTypeListMapper } from "../common/type-group";
 import { data } from "src/modules/global-data";
 import { toast } from "src/modules/toast";
 import loading from "src/modules/loading";
-
-type UploadProps = Parameters<typeof Upload>[0];
-type FormProps = Parameters<typeof Form>[0];
+import { publishNews } from "src/models/news/publish";
+import { updateUserInfo } from "src/utils/mini-program";
+import { useNavigate } from "react-router-dom";
 
 const IMAGE_LENGTH = 3;
 const TABS = typeList;
 const SUB_TABS = subTypeListMapper;
 
 const NewsPublish = (): JSX.Element => {
+    const navigate = useNavigate();
     const [levelOneType, setLevelOneType] = React.useState<number>(0);
     const [imagePaths, setImagePaths] = React.useState<{ url: string; path: string }[]>([]);
+
     const beforeUpload: UploadProps["beforeUpload"] = file => {
         loading.start("上传中...");
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             const limit = file.size / 1024 < 100; // 判断图片是否过大 100kb
             if (limit) resolve(file);
             const scale = 200 / (file.size / 1024);
@@ -28,13 +30,31 @@ const NewsPublish = (): JSX.Element => {
                 size: 100,
                 accuracy: 0.9,
                 scale: Math.max(0.5, Math.min(1, scale)),
-            }).then(res => resolve(res));
+            })
+                .then(res => resolve(res))
+                .catch(e => {
+                    console.log(e);
+                    reject(false);
+                    loading.end();
+                });
         });
     };
 
-    const onFinish: FormProps["onFinish"] = values => {
-        console.log("Success:", values);
-    };
+    const onFinish: FormProps<{ content: string; type: number; sub_type?: number }>["onFinish"] =
+        values => {
+            publishNews(
+                values.content,
+                values.type,
+                values.sub_type ? values.sub_type : 0,
+                imagePaths
+            ).then(res => {
+                if (res.update) {
+                    updateUserInfo();
+                } else {
+                    navigate("/mine/news", { replace: true });
+                }
+            });
+        };
 
     const onImageStatusChange: UploadProps["onChange"] = event => {
         // `status`: `uploading` `done` `error` `removed` 被`beforeUpload`拦截的文件没有`status`属性
@@ -47,7 +67,7 @@ const NewsPublish = (): JSX.Element => {
                     path: string;
                 } = event.file.response;
                 if (!response.status) {
-                    toast("上传失败，请稍后重试");
+                    toast("上传失败，请稍后重试", "error");
                 } else if (response.status === -1 && response.msg) {
                     toast(response.msg);
                 } else {
@@ -106,11 +126,9 @@ const NewsPublish = (): JSX.Element => {
                     {imagePaths.map((item, index) => (
                         <div
                             key={index}
-                            className={
-                                "a-x-center y-center a-flex-space-around " + styles.image_container
-                            }
+                            className={"a-flex-space-around " + styles.image_container}
                         >
-                            <img src={item.url} alt="" />
+                            <Image src={item.url} wrapperClassName="a-x-center" alt="" />
                         </div>
                     ))}
                     {imagePaths.length < IMAGE_LENGTH && (

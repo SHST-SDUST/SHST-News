@@ -19,3 +19,5 @@ const App: FC = () => (
 );
 
 export default App;
+
+// https://reactrouter.com/docs/en/v6/api

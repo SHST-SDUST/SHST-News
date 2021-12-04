@@ -24,7 +24,7 @@ export interface RequestInfo {
 }
 
 type NoUndefinedField<T> = { [P in keyof T]-?: NonNullable<T[P]> };
-
+export type CommonResponse = { status?: number; msg?: string };
 export type RequestOptionsAllNeeded = NoUndefinedField<RequestInfo>;
 
 export const request = <T>(requestInfo: RequestInfo) => {
@@ -32,19 +32,19 @@ export const request = <T>(requestInfo: RequestInfo) => {
         load: true,
         url: "",
         method: "GET",
-        headers: {},
+        headers: headers,
         data: {},
         param: {},
         debounce: 0,
         throttle: 0,
     };
     const requestConfig = extend<RequestOptionsAllNeeded>(defaultOptions, requestInfo);
-    return new Promise<T>((resolve, reject) => {
+    return new Promise<CommonResponse & T>((resolve, reject) => {
         const runRequest = () => {
             loading.start();
             console.log("Request for", requestConfig.url);
             axios
-                .request<{ status?: number; msg?: string } & T>({
+                .request<CommonResponse & T>({
                     url: requestConfig.url,
                     data: requestConfig.data,
                     params: requestConfig.param,
