@@ -1,5 +1,5 @@
 const NotFound: React.FC = () => {
-    return <div>404</div>;
+    return <div className="a-x-center">404</div>;
 };
 
 export default NotFound;

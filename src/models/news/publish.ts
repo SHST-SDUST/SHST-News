@@ -1,30 +1,32 @@
 import { data } from "src/modules/global-data";
-import { request } from "src/modules/request";
+import { request, WrapperResponse } from "src/modules/request";
 import { toast } from "src/modules/toast";
 
 export const publishNews = (
     content: string,
     type: number,
-    sub_type: number,
+    subType: number,
     imgs: { url: string; path: string }[]
 ) => {
-    type ResponseType = { update?: boolean };
+    type ResponseData = { update?: boolean };
+    type Response = WrapperResponse<ResponseData>;
     const img_url = imgs.map(item => item.path).join(",");
-    return new Promise<ResponseType>(resolve => {
-        request<ResponseType>({
+    return new Promise<Response>(resolve => {
+        request<ResponseData>({
             method: "POST",
             url: data.url + "/news/publish/publish",
             data: {
+                id: 0,
                 content,
                 type,
                 img_url,
-                sub_type,
+                sub_type: subType,
             },
         })
             .then(res => resolve(res))
-            .catch((err: Error) => {
+            .catch(() => {
                 toast("请求失败，请稍后重试", "error");
-                console.log("publishNews", err);
+                console.log("publishNews", "reject");
             });
     });
 };

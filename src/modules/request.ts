@@ -24,7 +24,7 @@ export interface RequestInfo {
 }
 
 type NoUndefinedField<T> = { [P in keyof T]-?: NonNullable<T[P]> };
-export type CommonResponse = { status?: number; msg?: string };
+export type WrapperResponse<T> = { status?: number; msg?: string } & T;
 export type RequestOptionsAllNeeded = NoUndefinedField<RequestInfo>;
 
 export const request = <T>(requestInfo: RequestInfo) => {
@@ -39,12 +39,12 @@ export const request = <T>(requestInfo: RequestInfo) => {
         throttle: 0,
     };
     const requestConfig = extend<RequestOptionsAllNeeded>(defaultOptions, requestInfo);
-    return new Promise<CommonResponse & T>((resolve, reject) => {
+    return new Promise<WrapperResponse<T>>((resolve, reject) => {
         const runRequest = () => {
             loading.start();
             console.log("Request for", requestConfig.url);
             axios
-                .request<CommonResponse & T>({
+                .request<WrapperResponse<T>>({
                     url: requestConfig.url,
                     data: requestConfig.data,
                     params: requestConfig.param,
@@ -66,7 +66,7 @@ export const request = <T>(requestInfo: RequestInfo) => {
                         }
                         resolve(res.data);
                     } else {
-                        reject(res.data);
+                        reject({ ...res.data, msg: "Remote Error" });
                     }
                 })
                 .finally(() => {
