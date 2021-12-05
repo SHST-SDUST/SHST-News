@@ -13,6 +13,7 @@ export type NewsItem = {
     praise: number;
     review: number;
     look_over: number;
+    imgs: string[];
 };
 
 export const fetchNewsList = (page: number, type: number, subType: number) => {
@@ -22,10 +23,15 @@ export const fetchNewsList = (page: number, type: number, subType: number) => {
         param: {
             sub_type: subType,
         },
-    }).catch(() => {
-        toast("请求失败，请稍后重试", "error");
-        console.error("fetchNewsList");
-        const rtn: WrapperResponse<Response> = { status: 0, list: [], overhead: [] };
-        return rtn;
-    });
+    })
+        .then(res => ({
+            ...res,
+            list: res.list.map(item => ({ ...item, imgs: item.img_url.split(",") })),
+        }))
+        .catch(() => {
+            toast("请求失败，请稍后重试", "error");
+            console.error("fetchNewsList");
+            const rtn: WrapperResponse<Response> = { status: 0, list: [], overhead: [] };
+            return rtn;
+        });
 };

@@ -11,6 +11,12 @@ $container-height: 50px;
     overflow-x: auto;
 }
 
+.sub-tab-container{
+    @extend .tab-container;
+    top: $container-height;
+    border-top: 1px solid #eee;
+}
+
 .container-gap{
     height: $container-height;
 }

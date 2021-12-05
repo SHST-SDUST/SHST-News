@@ -28,9 +28,10 @@ const end = (): void => {
         const loadingNode = document.getElementById("global-spin-element");
         if (loadingNode) {
             loadingNode.classList.add("global-spin-element-hide");
-            loadingNode.addEventListener("transitionend", () => {
-                document.body.removeChild(loadingNode);
-            });
+            // loadingNode.addEventListener("transitionend", () => {
+            //     document.body.removeChild(loadingNode);
+            // });
+            setTimeout(() => document.body.removeChild(loadingNode), 500);
         }
     }
 };

@@ -1,10 +1,16 @@
-import { typeList } from "./type-group.js";
+import { typeList } from "./type-group";
+
+const typesArray: string[] = [];
 
 export const typeFilter = (type: string | number) => {
+    let arr: string[] = [];
+    if (typesArray.length) {
+        arr = typesArray;
+    } else {
+        // ... 7 8
+        arr.push("全部", ...typeList.map(item => item.name), "兼职", "租房");
+    }
     const index = Number(type);
-    const arr = ["全部"];
-    typeList.forEach(v => arr.push(v.name));
-    arr.push("兼职", "租房"); // 7 8
     return arr[index] ? arr[index] : "其他";
 };
 

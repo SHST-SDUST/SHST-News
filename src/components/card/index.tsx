@@ -7,12 +7,13 @@ interface Props {
     titleHeight?: number;
     extra?: JSX.Element | null;
     content: JSX.Element | null;
+    className?: string;
 }
 
 const Card: React.FC<Props> = props => {
     return (
         <>
-            <div className={styles["card-container"]}>
+            <div className={styles["card-container"] + " " + props.className}>
                 <div>
                     {props.title && (
                         <div className={styles["title-container"]}>
@@ -38,6 +39,7 @@ const Card: React.FC<Props> = props => {
 Card.defaultProps = {
     color: "#79B2F9",
     titleHeight: 0,
+    className: "",
 };
 
 export default Card;
