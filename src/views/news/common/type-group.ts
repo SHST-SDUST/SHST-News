@@ -1,9 +1,9 @@
 export const typeList = [
     { name: "失物", index: 1 },
     { name: "招领", index: 2 },
-    { name: "拼车", index: 3 },
+    { name: "美食", index: 3 },
     { name: "二手", index: 4 },
-    { name: "校园", index: 5 },
+    { name: "拼车", index: 5 },
     { name: "其他", index: 6 },
 ];
 

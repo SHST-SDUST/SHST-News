@@ -7,6 +7,7 @@ import Tabs from "./tabs";
 import { fetchNewsList, fetchOverhead, NewsItem, OverheadItem } from "src/models/news/news";
 import NewsListItem from "../components/news-list-item";
 import Loading, { Props as LoadingProps } from "src/components/loading";
+import Overhead from "./overhead";
 
 const NewsIndex: React.FC = () => {
     const [page, setPage] = useState(1);
@@ -52,32 +53,13 @@ const NewsIndex: React.FC = () => {
                 subActiveTabIndex={subActiveTabIndex}
             ></Tabs>
             {overheadList.length > 0 && (
-                <div className="a-lmb">
-                    <Card
-                        content={
-                            <>
-                                <div>顶置</div>
-                                <div className="a-hr"></div>
-                                {overheadList.map((item, index) => (
-                                    <div key={item.id}>
-                                        <div className="a-line-3">{item.content}</div>
-                                        {index !== overheadList.length - 1 && (
-                                            <div className="a-hr"></div>
-                                        )}
-                                    </div>
-                                ))}
-                            </>
-                        }
-                    />
-                </div>
+                <Card className="a-lmb" content={<Overhead overheadList={overheadList} />} />
             )}
             <div>
                 {newsList.map(item => (
-                    <Card
-                        key={item.id}
-                        className="a-mb-10"
-                        content={<NewsListItem {...item} />}
-                    ></Card>
+                    <Link to={"/detail/" + item.id} key={item.id}>
+                        <Card className="a-mb-10" content={<NewsListItem {...item} />}></Card>
+                    </Link>
                 ))}
             </div>
             <Link to="publish" className={"a-x-center a-y-center " + styles["new-post-container"]}>
