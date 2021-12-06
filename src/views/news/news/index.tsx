@@ -4,7 +4,7 @@ import Card from "src/components/card";
 import styles from "./index.module.scss";
 import { Link } from "react-router-dom";
 import Tabs from "./tabs";
-import { fetchNewsList, NewsItem } from "src/models/news/news";
+import { fetchNewsList, fetchOverhead, NewsItem, OverheadItem } from "src/models/news/news";
 import NewsListItem from "../components/news-list-item";
 import Loading, { Props as LoadingProps } from "src/components/loading";
 
@@ -14,16 +14,26 @@ const NewsIndex: React.FC = () => {
     const [activeTabIndex, setActiveTabIndex] = useState(0);
     const [subActiveTabIndex, setSubActiveTabIndex] = useState(0);
     const [newsList, setNewsList] = useState<NewsItem[]>([]);
+    const [overheadList, setOverheadList] = useState<OverheadItem[]>([]);
 
     useEffect(() => {
+        loadOverhead(activeTabIndex);
         loadNews(activeTabIndex, 1, subActiveTabIndex);
     }, []);
 
-    const switchTab = (index: number, subIndex: number): void => {
+    const switchTab = (index: number, subIndex: number, type: 1 | 2): void => {
+        if (type === 1) subIndex = 0; // 点击的`Tab`是`1`级则重置`2`级标签
         setNewsList([]);
+        setOverheadList([]);
         setActiveTabIndex(index);
         setSubActiveTabIndex(subIndex);
         loadNews(index, 1, subIndex);
+        loadOverhead(index);
+    };
+
+    const loadOverhead = async (index: number) => {
+        const res = await fetchOverhead(index);
+        setOverheadList(res.list);
     };
 
     const loadNews = async (type: number, page: number, subType: number) => {
@@ -41,6 +51,26 @@ const NewsIndex: React.FC = () => {
                 switchTab={switchTab}
                 subActiveTabIndex={subActiveTabIndex}
             ></Tabs>
+            {overheadList.length > 0 && (
+                <div className="a-lmb">
+                    <Card
+                        content={
+                            <>
+                                <div>顶置</div>
+                                <div className="a-hr"></div>
+                                {overheadList.map((item, index) => (
+                                    <div key={item.id}>
+                                        <div className="a-line-3">{item.content}</div>
+                                        {index !== overheadList.length - 1 && (
+                                            <div className="a-hr"></div>
+                                        )}
+                                    </div>
+                                ))}
+                            </>
+                        }
+                    />
+                </div>
+            )}
             <div>
                 {newsList.map(item => (
                     <Card

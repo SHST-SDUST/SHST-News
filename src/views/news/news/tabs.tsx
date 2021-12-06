@@ -9,7 +9,7 @@ import { UserOutlined } from "@ant-design/icons";
 interface Props {
     activeTabIndex: number;
     subActiveTabIndex: number;
-    switchTab: (index: number, subIndex: number) => void;
+    switchTab: (index: number, subIndex: number, type: 1 | 2) => void;
 }
 
 const TABS = [{ name: "全部", index: 0 }, ...typeList];
@@ -18,7 +18,6 @@ const SUB_TABS: typeof subTypeListMapper = {
 };
 
 const Tabs: React.FC<Props> = props => {
-    const [nickName, setNickName] = useState("游客");
     const [avatarUrl, setAvatarUrl] = useState("");
     const [notice, setNotice] = useState(0);
 
@@ -33,7 +32,6 @@ const Tabs: React.FC<Props> = props => {
             setTimeout(() => checkUserInfo(getUserInfo), 500);
         } else {
             if (res.user) {
-                setNickName(res.user.nick_name);
                 setAvatarUrl(res.user.avatar_url);
                 setNotice(res.notice);
             }
@@ -65,7 +63,7 @@ const Tabs: React.FC<Props> = props => {
                             key={item.index}
                             onClick={() =>
                                 props.activeTabIndex !== item.index &&
-                                props.switchTab(item.index, props.subActiveTabIndex)
+                                props.switchTab(item.index, props.subActiveTabIndex, 1)
                             }
                         >
                             {getTabItem(item, props.activeTabIndex)}
@@ -73,7 +71,7 @@ const Tabs: React.FC<Props> = props => {
                     ))}
                 </div>
                 <div className={styles.mask}></div>
-                <div className={"a-y-center " + styles["user-info-container"]}>
+                <div className={"a-y-center a-pl-6 " + styles["user-info-container"]}>
                     <Badge count={notice} size="small">
                         <Avatar
                             size="small"
@@ -82,7 +80,7 @@ const Tabs: React.FC<Props> = props => {
                             src={avatarUrl}
                         />
                     </Badge>
-                    <div className="a-y-center a-ml-6 a-line-1">{nickName}</div>
+                    <div className="a-y-center a-ml-6 a-line-1">我的</div>
                 </div>
             </div>
             <div className={styles["container-gap"]}></div>
@@ -100,7 +98,7 @@ const Tabs: React.FC<Props> = props => {
                                 key={item.index}
                                 onClick={() =>
                                     props.subActiveTabIndex !== item.index &&
-                                    props.switchTab(props.activeTabIndex, item.index)
+                                    props.switchTab(props.activeTabIndex, item.index, 2)
                                 }
                             >
                                 {getTabItem(item, props.subActiveTabIndex)}

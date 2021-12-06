@@ -16,8 +16,13 @@ export type NewsItem = {
     imgs: string[];
 };
 
+export type OverheadItem = {
+    content: string;
+    id: number;
+};
+
 export const fetchNewsList = (page: number, type: number, subType: number) => {
-    type Response = { list: NewsItem[]; overhead: NewsItem[] };
+    type Response = { list: NewsItem[] };
     return request<Response>({
         url: data.url + `/news/home/getNews/${type}/${page}`,
         param: {
@@ -31,7 +36,19 @@ export const fetchNewsList = (page: number, type: number, subType: number) => {
         .catch(() => {
             toast("请求失败，请稍后重试", "error");
             console.error("fetchNewsList");
-            const rtn: WrapperResponse<Response> = { status: 0, list: [], overhead: [] };
+            const rtn: WrapperResponse<Response> = { status: 0, list: [] };
             return rtn;
         });
+};
+
+export const fetchOverhead = (type: number) => {
+    type Response = { list: OverheadItem[] };
+    return request<Response>({
+        url: data.url + `/news/home/getOverhead/${type}`,
+    }).catch(() => {
+        toast("请求失败，请稍后重试", "error");
+        console.error("fetchOverhead");
+        const rtn: WrapperResponse<Response> = { status: 0, list: [] };
+        return rtn;
+    });
 };

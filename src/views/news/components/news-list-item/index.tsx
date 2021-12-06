@@ -24,16 +24,16 @@ const NewsListItem: FC<NewsItem> = props => {
             <div className="a-y-center a-flex-space-between a-mt-8">
                 <Tag color="processing"># {typeFilter(props.type)}</Tag>
                 <div>
-                    <span className="a-mr-6">
-                        <EyeOutlined className="a-mr-3" />
+                    <span className="a-lmr a-color-blue">
+                        <EyeOutlined className="a-mr-3 " />
                         <span>{props.look_over}</span>
                     </span>
-                    <span className="a-mr-6">
-                        <HeartOutlined className="a-mr-3" />
+                    <span className="a-lmr a-color-orange">
+                        <HeartOutlined className="a-mr-3 " />
                         <span>{props.praise}</span>
                     </span>
-                    <span className="a-mr-6">
-                        <MessageOutlined className="a-mr-3" />
+                    <span className="a-lmr a-color-green-light">
+                        <MessageOutlined className="a-mr-3 " />
                         <span>{props.review}</span>
                     </span>
                 </div>
