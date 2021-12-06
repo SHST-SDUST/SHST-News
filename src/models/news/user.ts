@@ -2,7 +2,7 @@ import { data } from "src/modules/global-data";
 import { request, WrapperResponse } from "src/modules/request";
 import { toast } from "src/modules/toast";
 
-export const getUserInfo = () => {
+export const fetchUserInfo = () => {
     type Response = {
         user: null | { nick_name: string; avatar_url: string };
         update: boolean;

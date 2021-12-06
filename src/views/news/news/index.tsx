@@ -3,7 +3,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import Card from "src/components/card";
 import styles from "./index.module.scss";
 import { Link } from "react-router-dom";
-import Tabs from "./Tabs";
+import Tabs from "./tabs";
 import { fetchNewsList, NewsItem } from "src/models/news/news";
 import NewsListItem from "../components/news-list-item";
 import Loading, { Props as LoadingProps } from "src/components/loading";

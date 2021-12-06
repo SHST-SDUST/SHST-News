@@ -1,6 +1,7 @@
 @import "src/vector/styles/asse.scss";
 
-$container-height: 50px;
+$container-height: 45px;
+$user-info-width: 90px;
 
 .tab-container{
     position: fixed;
@@ -8,11 +9,19 @@ $container-height: 50px;
     left: 0;
     right: 0;
     height: $container-height;
+}
+
+.overflow-x-auto{
     overflow-x: auto;
+}
+
+.user-info-container{
+    width: $user-info-width;
 }
 
 .sub-tab-container{
     @extend .tab-container;
+    @extend .overflow-x-auto;
     top: $container-height;
     border-top: 1px solid #eee;
 }
@@ -43,4 +52,12 @@ $container-height: 50px;
     position: fixed;
     top: 86%;
     right: 30px;
+}
+
+.mask{
+    height: 100%;
+    width: 1px;
+    background-color: #eee;
+    opacity: 0.9;
+    box-shadow: -4px 0 6px 1px #888888;
 }
