@@ -31,18 +31,45 @@ export const publishNews = (
     });
 };
 
-export const postLike = (like: boolean) => {
+export const postLike = (id: number, like: boolean) => {
     type Response = { status: number };
     return new Promise<WrapperResponse<Response>>(resolve => {
         const operate = like ? "praise" : "deletePraise";
         request<Response>({
             url: data.url + `/news/praise/${operate}`,
             method: "POST",
+            data: { id },
         })
             .then(res => resolve(res))
             .catch(() => {
                 toast("操作失败，请稍后重试", "error");
-                console.log("likeOperate", "reject");
+                console.log("postLike", "reject");
+            });
+    });
+};
+
+export const postReview = (id: number, r_id: number, comment: string) => {
+    type Response = {
+        update?: boolean;
+        audit: boolean;
+        series: number;
+        user: { nick_name: string; avatar_url: string };
+        id: number;
+    };
+    return new Promise<WrapperResponse<Response>>(resolve => {
+        request<Response>({
+            url: data.url + `/news/review/review`,
+            method: "POST",
+            data: {
+                id,
+                comment,
+                r_id,
+            },
+        })
+            .then(res => resolve(res))
+            .catch(() => {
+                toast("评论失败，请稍后重试", "error");
+                console.log("postReview", "reject");
             });
     });
 };

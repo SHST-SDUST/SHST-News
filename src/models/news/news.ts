@@ -62,7 +62,6 @@ type ResponseReviewItem = {
     review: string;
     series: number;
     mine?: boolean;
-    u_id: number;
     r_id: number;
 };
 
@@ -87,7 +86,7 @@ export const fetchNewsDetail = (id: number) => {
                         .filter(item => item.r_id === 0)
                         .map(item => ({
                             ...item,
-                            children: res.reviews.filter(innerItem => innerItem.r_id === item.u_id),
+                            children: res.reviews.filter(innerItem => innerItem.r_id === item.id),
                         })),
                 });
             })

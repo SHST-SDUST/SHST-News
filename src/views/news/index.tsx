@@ -6,10 +6,15 @@ import MyNewsList from "./mine/news";
 import Detail from "./detail";
 import { data } from "src/modules/global-data";
 import { AliveScope, KeepAlive } from "react-activation";
+import { useState } from "react";
+import eventBus from "src/modules/event-bus";
 
 const NewsRouter = (): JSX.Element => {
-    const getUserStatus = () => data.user; // 未使用状态管理 直接检测守卫
+    const [userStatus, setUserStatus] = useState(data.user);
     const RedirectIndex = <Navigate replace={true} to="/" />;
+
+    eventBus.on("user-login", (status: number) => setUserStatus(status));
+
     return (
         <AliveScope>
             <Routes>
@@ -22,7 +27,7 @@ const NewsRouter = (): JSX.Element => {
                     }
                 ></Route>
                 <Route path="/detail/:id" element={<Detail />}></Route>
-                {getUserStatus() ? (
+                {userStatus ? (
                     <>
                         <Route path="/publish" element={<Publish />}></Route>
                         <Route path="/mine/news" element={<MyNewsList />}></Route>
