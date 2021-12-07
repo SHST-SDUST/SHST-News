@@ -2,7 +2,7 @@ import { FC } from "react";
 import { NewsDetail } from "src/models/news/news";
 import styles from "./index.module.scss";
 import publishStyles from "../../publish/index.module.scss";
-import { Tag } from "antd";
+import { Tag, Image } from "antd";
 import { MessageOutlined, HeartOutlined, EyeOutlined } from "@ant-design/icons";
 import { typeFilter } from "../../common/filters";
 interface Props {
@@ -11,26 +11,31 @@ interface Props {
 
 const IMAGE_LENGTH = 3;
 
-const DetailItem: FC<Props & NewsDetail> = props => (
-    <>
+const DetailItem: FC<Partial<Props & NewsDetail>> = props => (
+    <div className="a-background-white padding-page a-pt-15">
         <div className="a-y-center">
             <img className={styles.avatar + " a-mr-6"} src={props.avatar_url} alt="" />
             <div>{props.nick_name}</div>
         </div>
-        <div className="a-mt-8">{props.content}</div>
+        <div className="a-lmt">{props.content}</div>
         {props.host && (
-            <div className="a-y-center a-flex-space-between">
+            <div className="a-y-center a-flex-space-between a-mt-8">
                 <>
-                    {props.imgs.map((img, index) => (
-                        <div key={index} className="a-y-center a-mt-8">
-                            <div className={"a-x-center " + styles.image_container}>
-                                <img src={props.host + "public/upload/" + img} alt="" />
-                            </div>
+                    {props.imgs?.map((path, index) => (
+                        <div
+                            key={index}
+                            className={"a-flex-space-around " + publishStyles.image_container}
+                        >
+                            <Image
+                                src={props.host + "public/upload/" + path}
+                                wrapperClassName="a-x-center"
+                                alt=""
+                            />
                         </div>
                     ))}
                 </>
-                {IMAGE_LENGTH - props.imgs.length - 1 > 0 &&
-                    Array(IMAGE_LENGTH - props.imgs.length - 1)
+                {IMAGE_LENGTH - Number(props.imgs?.length) > 0 &&
+                    Array(IMAGE_LENGTH - Number(props.imgs?.length))
                         .fill(null)
                         .map((_, index) => (
                             <div
@@ -41,8 +46,8 @@ const DetailItem: FC<Props & NewsDetail> = props => (
             </div>
         )}
 
-        <div className="a-y-center a-flex-space-between a-mt-8">
-            <Tag color="processing"># {typeFilter(props.type)}</Tag>
+        <div className="a-y-center a-flex-space-between a-lmt">
+            <Tag color="processing"># {typeFilter(Number(props.type))}</Tag>
             <div>
                 <span className="a-lmr a-color-blue">
                     <EyeOutlined className="a-mr-3 " />
@@ -58,7 +63,7 @@ const DetailItem: FC<Props & NewsDetail> = props => (
                 </span>
             </div>
         </div>
-    </>
+    </div>
 );
 
 DetailItem.defaultProps = {};

@@ -79,6 +79,10 @@ export const fetchNewsDetail = (id: number) => {
             .then(res => {
                 resolve({
                     ...res,
+                    detail: {
+                        ...res.detail,
+                        imgs: res.detail.img_url.split(","),
+                    },
                     reviews: res.reviews
                         .filter(item => item.r_id === 0)
                         .map(item => ({

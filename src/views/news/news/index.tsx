@@ -58,7 +58,10 @@ const NewsIndex: React.FC = () => {
             <div>
                 {newsList.map(item => (
                     <Link to={"/detail/" + item.id} key={item.id}>
-                        <Card className="a-mb-10" content={<NewsListItem {...item} />}></Card>
+                        <Card
+                            className="a-mb-10 a-color-grey"
+                            content={<NewsListItem {...item} />}
+                        ></Card>
                     </Link>
                 ))}
             </div>

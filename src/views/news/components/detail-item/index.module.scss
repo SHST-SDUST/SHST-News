@@ -1,12 +1,5 @@
-$avatar: 26px;
+$avatar: 28px;
 $image-matrix: 100px;
-
-.image_container{
-    height: $image-matrix;
-    width:  $image-matrix;
-    border: 1px solid #eee;
-    overflow: hidden;
-}
 
 .avatar{
     overflow: hidden;
