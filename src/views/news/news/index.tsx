@@ -8,8 +8,12 @@ import { fetchNewsList, fetchOverhead, NewsItem, OverheadItem } from "src/models
 import NewsListItem from "../components/news-list-item";
 import Loading, { Props as LoadingProps } from "src/components/loading";
 import Overhead from "./overhead";
+import { data } from "src/modules/global-data";
+import { toast } from "src/modules/toast";
+import { useNavigate } from "react-router-dom";
 
 const NewsIndex: React.FC = () => {
+    const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState<LoadingProps["loading"]>("loadmore");
     const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -45,6 +49,14 @@ const NewsIndex: React.FC = () => {
         else setLoading("loadmore");
     };
 
+    const toPublish = () => {
+        if (data.user === 0) {
+            toast("您处于游客状态，请在山科小站中操作");
+            return void 0;
+        }
+        navigate("publish");
+    };
+
     return (
         <div className="padding-page">
             <Tabs
@@ -65,9 +77,12 @@ const NewsIndex: React.FC = () => {
                     </Link>
                 ))}
             </div>
-            <Link to="publish" className={"a-x-center a-y-center " + styles["new-post-container"]}>
+            <div
+                onClick={toPublish}
+                className={"a-x-center a-y-center " + styles["new-post-container"]}
+            >
                 <PlusOutlined style={{ fontSize: "20px" }} />
-            </Link>
+            </div>
             <Loading
                 loading={loading}
                 loadmore={() => loadNews(activeTabIndex, page + 1, subActiveTabIndex)}

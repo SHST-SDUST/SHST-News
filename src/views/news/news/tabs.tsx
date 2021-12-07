@@ -5,6 +5,7 @@ import { fetchUserInfo } from "src/models/news/user";
 import { checkUserInfo, updateUserInfo } from "src/utils/mini-program";
 import { Avatar, Badge } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { data } from "src/modules/global-data";
 
 interface Props {
     activeTabIndex: number;
@@ -27,14 +28,14 @@ const Tabs: React.FC<Props> = props => {
 
     const getUserInfo = async () => {
         const res = await fetchUserInfo();
+        if (res.type !== "tourist") data.user = 1;
+        if (res.user) {
+            setAvatarUrl(res.user.avatar_url);
+            setNotice(res.notice);
+        }
         if (res.update) {
             updateUserInfo();
             setTimeout(() => checkUserInfo(getUserInfo), 500);
-        } else {
-            if (res.user) {
-                setAvatarUrl(res.user.avatar_url);
-                setNotice(res.notice);
-            }
         }
     };
 

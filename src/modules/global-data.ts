@@ -16,7 +16,7 @@ export interface Data {
 export const data: Data = {
     url: "https://shstplus.touchczy.top",
     tmp: {},
-    user: 0, // 0 未登录 1 已登陆
+    user: 0, // `0`游客 `1`用户
     openid: "",
     project: "山科小站",
 };

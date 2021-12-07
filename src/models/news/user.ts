@@ -7,6 +7,7 @@ export const fetchUserInfo = () => {
         user: null | { nick_name: string; avatar_url: string };
         update: boolean;
         notice: number;
+        type: "tourist" | "user";
     };
     return new Promise<WrapperResponse<Response>>(resolve => {
         request<Response>({

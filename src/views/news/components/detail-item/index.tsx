@@ -3,20 +3,23 @@ import { NewsDetail } from "src/models/news/news";
 import styles from "./index.module.scss";
 import publishStyles from "../../publish/index.module.scss";
 import { Tag, Image } from "antd";
-import { MessageOutlined, HeartOutlined, EyeOutlined } from "@ant-design/icons";
+import { MessageOutlined, HeartOutlined, EyeOutlined, HeartFilled } from "@ant-design/icons";
 import { typeFilter } from "../../common/filters";
 interface Props {
+    praised: boolean;
+    likeOperate: () => void;
     ext?: JSX.Element;
 }
 
 const IMAGE_LENGTH = 3;
 
-const DetailItem: FC<Partial<Props & NewsDetail>> = props => (
+const DetailItem: FC<Props & Partial<NewsDetail>> = props => (
     <div className="a-background-white padding-page a-pt-15">
         <div className="a-y-center">
             <img className={styles.avatar + " a-mr-6"} src={props.avatar_url} alt="" />
             <div>{props.nick_name}</div>
         </div>
+        <div className="a-mt-8 a-fontsize-12">{props.create_time}</div>
         <div className="a-lmt">{props.content}</div>
         {props.host && (
             <div className="a-y-center a-flex-space-between a-mt-8">
@@ -53,8 +56,12 @@ const DetailItem: FC<Partial<Props & NewsDetail>> = props => (
                     <EyeOutlined className="a-mr-3 " />
                     <span>{props.look_over}</span>
                 </span>
-                <span className="a-lmr a-color-orange">
-                    <HeartOutlined className="a-mr-3 " />
+                <span className="a-lmr a-color-orange" onClick={props.likeOperate}>
+                    {props.praised ? (
+                        <HeartFilled className="a-mr-3 " />
+                    ) : (
+                        <HeartOutlined className="a-mr-3 " />
+                    )}
                     <span>{props.praise}</span>
                 </span>
                 <span className="a-lmr a-color-green-light">

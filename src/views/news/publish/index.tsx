@@ -10,6 +10,7 @@ import loading from "src/modules/loading";
 import { publishNews } from "src/models/news/publish";
 import { updateUserInfo } from "src/utils/mini-program";
 import { useNavigate } from "react-router-dom";
+import { throttle } from "src/modules/operate-limit";
 
 const IMAGE_LENGTH = 3;
 const TABS = typeList;
@@ -42,17 +43,19 @@ const NewsPublish = (): JSX.Element => {
 
     const onFinish: FormProps<{ content: string; type: number; sub_type?: number }>["onFinish"] =
         values => {
-            publishNews(
-                values.content,
-                values.type,
-                values.sub_type ? values.sub_type : 0,
-                imagePaths
-            ).then(res => {
-                if (res.update) {
-                    updateUserInfo();
-                } else {
-                    navigate("/mine/news", { replace: true });
-                }
+            throttle(500, () => {
+                publishNews(
+                    values.content,
+                    values.type,
+                    values.sub_type ? values.sub_type : 0,
+                    imagePaths
+                ).then(res => {
+                    if (res.update) {
+                        updateUserInfo();
+                    } else {
+                        navigate("/mine/news", { replace: true });
+                    }
+                });
             });
         };
 

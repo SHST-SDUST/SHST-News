@@ -30,3 +30,19 @@ export const publishNews = (
             });
     });
 };
+
+export const postLike = (like: boolean) => {
+    type Response = { status: number };
+    return new Promise<WrapperResponse<Response>>(resolve => {
+        const operate = like ? "praise" : "deletePraise";
+        request<Response>({
+            url: data.url + `/news/praise/${operate}`,
+            method: "POST",
+        })
+            .then(res => resolve(res))
+            .catch(() => {
+                toast("操作失败，请稍后重试", "error");
+                console.log("likeOperate", "reject");
+            });
+    });
+};
