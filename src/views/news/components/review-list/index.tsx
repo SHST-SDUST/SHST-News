@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { ReviewItem } from "src/models/news/news";
 import styles from "./index.module.scss";
 import { Modal, Input, ModalProps, Empty } from "antd";
@@ -8,6 +8,7 @@ import { postReview } from "src/models/news/publish";
 import { updateUserInfo } from "src/utils/mini-program";
 import { report } from "src/utils/feedback";
 import { data } from "src/modules/global-data";
+import { User } from "src/models/common/constant";
 interface Props {
     reviews: ReviewItem[];
     className?: string;
@@ -15,7 +16,7 @@ interface Props {
         id: number,
         index: number,
         replySubIndex: number,
-        user: { nick_name: string; avatar_url: string },
+        user: User,
         comment: string,
         series: number
     ) => void;

@@ -8,6 +8,7 @@ import { data } from "src/modules/global-data";
 import { AliveScope, KeepAlive } from "react-activation";
 import { useState, useEffect } from "react";
 import eventBus from "src/modules/event-bus";
+import Notice from "./mine/notice";
 
 const NewsRouter = (): JSX.Element => {
     const [userStatus, setUserStatus] = useState(data.user);
@@ -37,11 +38,13 @@ const NewsRouter = (): JSX.Element => {
                     <>
                         <Route path="/publish" element={<Publish />}></Route>
                         <Route path="/mine/news" element={<MyNewsList />}></Route>
+                        <Route path="/mine/notice" element={<Notice />}></Route>
                     </>
                 ) : (
                     <>
                         <Route path="/publish" element={RedirectIndex}></Route>
                         <Route path="/mine/news" element={RedirectIndex}></Route>
+                        <Route path="/mine/notice" element={RedirectIndex}></Route>
                     </>
                 )}
                 <Route path="*" element={<NotFound />}></Route>

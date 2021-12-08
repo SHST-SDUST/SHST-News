@@ -5,8 +5,7 @@ import { fetchUserInfo } from "src/models/news/user";
 import { checkUserInfo, updateUserInfo } from "src/utils/mini-program";
 import { Avatar, Badge } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { data } from "src/modules/global-data";
-import eventBus from "src/modules/event-bus";
+import { useRoutePath } from "src/utils/useRouter";
 
 interface Props {
     activeTabIndex: number;
@@ -20,6 +19,7 @@ const SUB_TABS: typeof subTypeListMapper = {
 };
 
 const Tabs: React.FC<Props> = props => {
+    const nav = useRoutePath();
     const [avatarUrl, setAvatarUrl] = useState("");
     const [notice, setNotice] = useState(0);
 
@@ -73,15 +73,19 @@ const Tabs: React.FC<Props> = props => {
                 </div>
                 <div className={styles.mask}></div>
                 <div className={"a-y-center a-pl-6 " + styles["user-info-container"]}>
-                    <Badge count={notice} size="small">
-                        <Avatar
-                            size="small"
-                            style={{ backgroundColor: "#1890ff" }}
-                            icon={<UserOutlined />}
-                            src={avatarUrl}
-                        />
-                    </Badge>
-                    <div className="a-y-center a-ml-6 a-line-1">我的</div>
+                    <div onClick={() => nav("/mine/notice")}>
+                        <Badge count={notice} size="small">
+                            <Avatar
+                                size="small"
+                                style={{ backgroundColor: "#1890ff" }}
+                                icon={<UserOutlined />}
+                                src={avatarUrl}
+                            />
+                        </Badge>
+                    </div>
+                    <div onClick={() => nav("/mine/news")} className="a-y-center a-ml-6 a-line-1">
+                        我的
+                    </div>
                 </div>
             </div>
             <div className={styles["container-gap"]}></div>

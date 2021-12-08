@@ -1,6 +1,7 @@
 import { data } from "src/modules/global-data";
 import { request, WrapperResponse } from "src/modules/request";
 import { toast } from "src/modules/toast";
+import { User } from "../common/constant";
 
 export const publishNews = (
     content: string,
@@ -53,7 +54,7 @@ export const postReview = (id: number, f_id: number, r_id: number, comment: stri
         update?: boolean;
         audit: boolean;
         series: number;
-        user: { nick_name: string; avatar_url: string };
+        user: User;
         id: number;
     };
     return new Promise<WrapperResponse<Response>>(resolve => {

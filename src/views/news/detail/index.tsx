@@ -10,6 +10,7 @@ import ReviewList from "../components/review-list";
 import { Skeleton } from "antd";
 import Card from "src/components/card";
 import { formatDate } from "src/modules/datetime";
+import { User } from "src/models/common/constant";
 
 const Detail: FC = () => {
     const { id } = useParams();
@@ -51,7 +52,7 @@ const Detail: FC = () => {
         id: number,
         index: number,
         subIndex: number,
-        user: { nick_name: string; avatar_url: string },
+        user: User,
         comment: string,
         series: number
     ) => {

@@ -5,7 +5,7 @@
 export interface Data {
     url: string;
     tmp: {
-        [key: string]: unknown;
+        [key: string]: any;
     };
     user: number;
     project: string;
