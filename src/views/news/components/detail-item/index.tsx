@@ -5,7 +5,9 @@ import publishStyles from "../../publish/index.module.scss";
 import { Tag, Image } from "antd";
 import { MessageOutlined, HeartOutlined, EyeOutlined, HeartFilled } from "@ant-design/icons";
 import { typeFilter } from "../../common/filters";
+import { report } from "src/utils/feedback";
 interface Props {
+    id: number;
     praised: boolean;
     likeOperate: () => void;
     ext?: JSX.Element;
@@ -15,9 +17,17 @@ const IMAGE_LENGTH = 3;
 
 const DetailItem: FC<Props & Partial<NewsDetail>> = props => (
     <div className="a-background-white padding-page a-pt-15">
-        <div className="a-y-center">
-            <img className={styles.avatar + " a-mr-6"} src={props.avatar_url} alt="" />
-            <div>{props.nick_name}</div>
+        <div className="a-flex-space-between">
+            <div className="a-y-center">
+                <img className={styles.avatar + " a-mr-6"} src={props.avatar_url} alt="" />
+                <div>{props.nick_name}</div>
+            </div>
+            <div
+                className="a-link"
+                onClick={() => report(props.id, "post", props.content || "Error")}
+            >
+                举报
+            </div>
         </div>
         <div className="a-mt-8 a-fontsize-12">{props.create_time}</div>
         <div className="a-lmt">{props.content}</div>

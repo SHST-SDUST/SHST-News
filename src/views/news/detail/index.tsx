@@ -9,6 +9,7 @@ import { data } from "src/modules/global-data";
 import ReviewList from "../components/review-list";
 import { Skeleton } from "antd";
 import Card from "src/components/card";
+import { formatDate } from "src/modules/datetime";
 
 const Detail: FC = () => {
     const { id } = useParams();
@@ -63,6 +64,7 @@ const Detail: FC = () => {
             mine: true,
             r_id: 0,
             children: [],
+            review_time: formatDate("yyyy-MM-dd HH:mm:ss"),
         };
         if (index === -1) {
             reviews.push(reviewInfo);
@@ -78,7 +80,12 @@ const Detail: FC = () => {
                 <Card content={<Skeleton active avatar paragraph={{ rows: 6 }} />} />
             ) : (
                 <div>
-                    <DetailItem {...newsDetail} praised={praised} likeOperate={likeOperate} />
+                    <DetailItem
+                        {...newsDetail}
+                        praised={praised}
+                        likeOperate={likeOperate}
+                        id={Number(id)}
+                    />
                     <ReviewList
                         reviews={reviews}
                         className="a-mt-15"

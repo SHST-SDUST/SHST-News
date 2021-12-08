@@ -6,6 +6,8 @@ import Card from "src/components/card";
 import { toast } from "src/modules/toast";
 import { postReview } from "src/models/news/publish";
 import { updateUserInfo } from "src/utils/mini-program";
+import { report } from "src/utils/feedback";
+import { data } from "src/modules/global-data";
 interface Props {
     reviews: ReviewItem[];
     className?: string;
@@ -53,6 +55,10 @@ const ReviewList: FC<Props> = props => {
     };
 
     const startReview = (index: number) => {
+        if (data.user === 0) {
+            toast("您处于游客状态，请在山科小站中操作");
+            return void 0;
+        }
         setReplyIndex(index);
         setShowInput(true);
     };
@@ -65,14 +71,45 @@ const ReviewList: FC<Props> = props => {
                     <>
                         <div className="a-y-center a-flex-space-between a-pt a-pb">
                             <div>全部评论</div>
-                            <div className="a-color-blue" onClick={() => startReview(-1)}>
+                            <div className="a-link" onClick={() => startReview(-1)}>
                                 写评论
                             </div>
                         </div>
                         <div className="a-hr"></div>
-                        {props.reviews.map(item => (
+                        {props.reviews.map((item, index) => (
                             <div key={item.id}>
-                                <div>{item.review}</div>
+                                <div className="a-y-center a-flex-space-between a-mt-8">
+                                    <div className="a-y-center">
+                                        <img
+                                            className={styles.avatar + " a-mr-6"}
+                                            src={item.avatar_url}
+                                            alt=""
+                                        />
+                                        <div>{item.nick_name}</div>
+                                    </div>
+                                    <div>#{item.series}</div>
+                                </div>
+                                <div className="a-lmt a-ml">{item.review}</div>
+                                <div className="a-flex-space-between a-lmt a-ml">
+                                    <div>{item.review_time}</div>
+                                    <div className="a-link a-y-center">
+                                        <div className="a-lml" onClick={() => startReview(index)}>
+                                            回复
+                                        </div>
+                                        {item.mine ? (
+                                            <div className="a-lml">删除</div>
+                                        ) : (
+                                            <div
+                                                className="a-lml"
+                                                onClick={() =>
+                                                    report(item.id, "review", item.review)
+                                                }
+                                            >
+                                                举报
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                                 <div className="a-hr"></div>
                             </div>
                         ))}
@@ -82,7 +119,12 @@ const ReviewList: FC<Props> = props => {
                     </>
                 }
             />
-            <Modal title="写评论" visible={showInput} onOk={confirmModal} onCancel={cancelModal}>
+            <Modal
+                title={replyIndex === -1 ? "写评论" : "回复"}
+                visible={showInput}
+                onOk={confirmModal}
+                onCancel={cancelModal}
+            >
                 <Input
                     maxLength={100}
                     value={inputText}

@@ -62,6 +62,7 @@ type ResponseReviewItem = {
     review: string;
     series: number;
     mine?: boolean;
+    review_time: string;
     r_id: number;
 };
 
