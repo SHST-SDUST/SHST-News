@@ -34,7 +34,7 @@ export const publishNews = (
 export const postLike = (id: number, like: boolean) => {
     type Response = { status: number };
     return new Promise<WrapperResponse<Response>>(resolve => {
-        const operate = like ? "praise" : "deletePraise";
+        const operate = like ? "praise" : "delete";
         request<Response>({
             url: data.url + `/news/praise/${operate}`,
             method: "POST",
@@ -66,6 +66,22 @@ export const postReview = (id: number, f_id: number, r_id: number, comment: stri
             .catch(() => {
                 toast("评论失败，请稍后重试", "error");
                 console.log("postReview", "reject");
+            });
+    });
+};
+
+export const deleteReview = (p_id: number, r_id: number) => {
+    type Response = { status: number };
+    return new Promise<WrapperResponse<Response>>(resolve => {
+        request<Response>({
+            url: data.url + `/news/review/delete`,
+            method: "POST",
+            data: { p_id, r_id },
+        })
+            .then(res => resolve(res))
+            .catch(() => {
+                toast("删除失败，请稍后重试", "error");
+                console.log("deleteReview", "reject");
             });
     });
 };

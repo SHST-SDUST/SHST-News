@@ -21,6 +21,7 @@ interface Props {
     ) => void;
     id: number;
     reviewIdNameMap: Record<string, string>;
+    deleteReviewItem: (reviewId: number, index: number, subIndex: number) => void;
 }
 
 const ReviewList: FC<Props> = props => {
@@ -103,7 +104,12 @@ const ReviewList: FC<Props> = props => {
                         回复
                     </div>
                     {item.mine ? (
-                        <div className="a-lml">删除</div>
+                        <div
+                            className="a-lml"
+                            onClick={() => props.deleteReviewItem(item.id, index, subIndex)}
+                        >
+                            删除
+                        </div>
                     ) : (
                         <div
                             className="a-lml"
@@ -137,7 +143,8 @@ const ReviewList: FC<Props> = props => {
                                     <div
                                         key={subItem.id}
                                         className={
-                                            "a-lml a-background-grey a-mt " + styles.padding_block
+                                            "a-lml a-background-grey a-mt border-radius-6 " +
+                                            styles.padding_block
                                         }
                                     >
                                         {ReviewBlock(subItem, index, subIndex)}

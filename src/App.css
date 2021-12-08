@@ -63,3 +63,7 @@ body{
 .ant-image-img{
     width: auto;
 }
+
+.border-radius-6{
+    border-radius: 6px;
+}

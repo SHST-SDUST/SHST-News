@@ -3,8 +3,8 @@ import styles from "./index.module.scss";
 import { useParams } from "react-router-dom";
 import { fetchNewsDetail, NewsDetail, ReviewItem } from "src/models/news/news";
 import DetailItem from "../components/detail-item";
-import { postLike } from "src/models/news/publish";
-import { toast } from "src/modules/toast";
+import { deleteReview, postLike } from "src/models/news/publish";
+import { confirm, toast } from "src/modules/toast";
 import { data } from "src/modules/global-data";
 import ReviewList from "../components/review-list";
 import { Skeleton } from "antd";
@@ -50,7 +50,7 @@ const Detail: FC = () => {
     const newReviewHandler = (
         id: number,
         index: number,
-        replySubIndex: number,
+        subIndex: number,
         user: { nick_name: string; avatar_url: string },
         comment: string,
         series: number
@@ -70,18 +70,31 @@ const Detail: FC = () => {
             children: [],
             review_time: formatDate("yyyy-MM-dd hh:mm:ss"),
         };
-        if (index === -1 && replySubIndex === -1) {
+        if (index === -1 && subIndex === -1) {
             reviews.push(reviewInfo);
-        } else if (index !== -1 && replySubIndex === -1) {
+        } else if (index !== -1 && subIndex === -1) {
             reviewInfo.f_id = reviews[index].id;
             reviews[index].children.push(reviewInfo);
-        } else if (index !== -1 && replySubIndex !== -1) {
+        } else if (index !== -1 && subIndex !== -1) {
             reviewInfo.f_id = reviews[index].id;
-            reviewInfo.r_id = reviews[index].children[replySubIndex].id;
+            reviewInfo.r_id = reviews[index].children[subIndex].id;
             reviews[index].children.push(reviewInfo);
         }
         setReviews(reviews);
     };
+
+    const deleteReviewItem = async (reviewId: number, index: number, subIndex: number) => {
+        const choice = await confirm("警告", "确定要删除评论吗?");
+        if (!choice) return void 0;
+        await deleteReview(Number(id), reviewId);
+        if (index !== -1 && subIndex === -1) {
+            reviews.splice(index, 1);
+        } else if (index !== -1 && subIndex !== -1) {
+            reviews[index].children.splice(subIndex, 1);
+        }
+        setReviews([...reviews]);
+    };
+
     return (
         <>
             {loading ? (
@@ -100,6 +113,7 @@ const Detail: FC = () => {
                         newReviewHandler={newReviewHandler}
                         id={Number(id)}
                         reviewIdNameMap={reviewIdNameMap}
+                        deleteReviewItem={deleteReviewItem}
                     />
                 </div>
             )}

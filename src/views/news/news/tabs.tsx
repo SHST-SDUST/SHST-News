@@ -29,10 +29,6 @@ const Tabs: React.FC<Props> = props => {
 
     const getUserInfo = async () => {
         const res = await fetchUserInfo();
-        if (res.type !== "tourist") {
-            data.user = 1;
-            eventBus.commit("user-login", 1);
-        }
         if (res.user) {
             setAvatarUrl(res.user.avatar_url);
             setNotice(res.notice);

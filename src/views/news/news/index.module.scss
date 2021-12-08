@@ -4,11 +4,13 @@ $container-height: 45px;
 $user-info-width: 96px;
 
 .tab-container{
+    box-sizing: border-box;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     height: $container-height;
+    border-bottom: 1px solid #eee;
 }
 
 .overflow-x-auto{
@@ -23,7 +25,7 @@ $user-info-width: 96px;
     @extend .tab-container;
     @extend .overflow-x-auto;
     top: $container-height;
-    border-top: 1px solid #eee;
+    height: $container-height + 2;
 }
 
 .container-gap{

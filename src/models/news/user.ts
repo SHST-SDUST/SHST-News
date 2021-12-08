@@ -7,7 +7,6 @@ export const fetchUserInfo = () => {
         user: null | { nick_name: string; avatar_url: string };
         update: boolean;
         notice: number;
-        type: "tourist" | "user";
     };
     return new Promise<WrapperResponse<Response>>(resolve => {
         request<Response>({
@@ -16,7 +15,21 @@ export const fetchUserInfo = () => {
             .then(res => resolve(res))
             .catch(() => {
                 toast("获取用户信息失败，请稍后重试", "error");
-                console.log("getUserInfo", "reject");
+                console.log("fetchUserInfo", "reject");
+            });
+    });
+};
+
+export const fetchUserStatus = () => {
+    type Response = { info: "" | "tourist" };
+    return new Promise<WrapperResponse<Response>>(resolve => {
+        request<Response>({
+            url: data.url + "/news/home/getUserStatus",
+        })
+            .then(res => resolve(res))
+            .catch(() => {
+                toast("获取用户状态失败，请稍后重试", "error");
+                console.log("fetchUserStatus", "reject");
             });
     });
 };
