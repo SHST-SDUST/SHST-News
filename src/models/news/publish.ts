@@ -48,7 +48,7 @@ export const postLike = (id: number, like: boolean) => {
     });
 };
 
-export const postReview = (id: number, r_id: number, comment: string) => {
+export const postReview = (id: number, f_id: number, r_id: number, comment: string) => {
     type Response = {
         update?: boolean;
         audit: boolean;
@@ -60,11 +60,7 @@ export const postReview = (id: number, r_id: number, comment: string) => {
         request<Response>({
             url: data.url + `/news/review/review`,
             method: "POST",
-            data: {
-                id,
-                comment,
-                r_id,
-            },
+            data: { id, comment, r_id, f_id },
         })
             .then(res => resolve(res))
             .catch(() => {

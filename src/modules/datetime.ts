@@ -53,7 +53,7 @@ export function safeDate(
 // };
 
 /**
- * yyyy年 MM月 dd日 hh1~12小时制(1-12) HH24小时制(0-23) mm分 ss秒 S毫秒 K周
+ * yyyy年 MM月 dd日 hh1~12小时制(1-12) mm分 ss秒 S毫秒 K周
  */
 export const formatDate = (fmt = "yyyy-MM-dd", date = safeDate()): string => {
     const week = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];

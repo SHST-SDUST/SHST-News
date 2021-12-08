@@ -17,6 +17,7 @@ const Detail: FC = () => {
     const [praised, setPraised] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [reviews, setReviews] = useState<ReviewItem[]>([]);
+    const [reviewIdNameMap, setReviewIdNameMap] = useState<Record<string, string>>({});
 
     useEffect(() => {
         getNewsDetail();
@@ -28,6 +29,7 @@ const Detail: FC = () => {
         setPraised(res.praised);
         setLoading(false);
         setReviews(res.reviews);
+        setReviewIdNameMap(res.reviewIdNameMap);
     };
     const likeOperate = async () => {
         if (data.user === 0) {
@@ -48,6 +50,7 @@ const Detail: FC = () => {
     const newReviewHandler = (
         id: number,
         index: number,
+        replySubIndex: number,
         user: { nick_name: string; avatar_url: string },
         comment: string,
         series: number
@@ -62,14 +65,19 @@ const Detail: FC = () => {
             review: comment,
             series: series,
             mine: true,
+            f_id: 0,
             r_id: 0,
             children: [],
-            review_time: formatDate("yyyy-MM-dd HH:mm:ss"),
+            review_time: formatDate("yyyy-MM-dd hh:mm:ss"),
         };
-        if (index === -1) {
+        if (index === -1 && replySubIndex === -1) {
             reviews.push(reviewInfo);
-        } else {
-            reviewInfo.r_id = reviews[index].r_id;
+        } else if (index !== -1 && replySubIndex === -1) {
+            reviewInfo.f_id = reviews[index].id;
+            reviews[index].children.push(reviewInfo);
+        } else if (index !== -1 && replySubIndex !== -1) {
+            reviewInfo.f_id = reviews[index].id;
+            reviewInfo.r_id = reviews[index].children[replySubIndex].id;
             reviews[index].children.push(reviewInfo);
         }
         setReviews(reviews);
@@ -91,6 +99,7 @@ const Detail: FC = () => {
                         className="a-mt-15"
                         newReviewHandler={newReviewHandler}
                         id={Number(id)}
+                        reviewIdNameMap={reviewIdNameMap}
                     />
                 </div>
             )}

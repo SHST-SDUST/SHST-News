@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { ReviewItem } from "src/models/news/news";
 import styles from "./index.module.scss";
 import { Modal, Input, ModalProps, Empty } from "antd";
@@ -14,17 +14,20 @@ interface Props {
     newReviewHandler: (
         id: number,
         index: number,
+        replySubIndex: number,
         user: { nick_name: string; avatar_url: string },
         comment: string,
         series: number
     ) => void;
     id: number;
+    reviewIdNameMap: Record<string, string>;
 }
 
 const ReviewList: FC<Props> = props => {
     const [showInput, setShowInput] = useState(false);
     const [inputText, setInputText] = useState("");
     const [replyIndex, setReplyIndex] = useState(-1);
+    const [replySubIndex, setReplySubIndex] = useState(-1);
 
     const confirmModal: ModalProps["onOk"] = async () => {
         if (!inputText) {
@@ -35,8 +38,9 @@ const ReviewList: FC<Props> = props => {
             toast("评论内容不能大于100字");
             return void 0;
         }
-        const rId = replyIndex === -1 ? 0 : props.reviews[replyIndex].id;
-        const res = await postReview(props.id, rId, inputText);
+        const fId = replyIndex === -1 ? 0 : props.reviews[replyIndex].id;
+        const rId = replySubIndex === -1 ? 0 : props.reviews[replyIndex].children[replySubIndex].id;
+        const res = await postReview(props.id, fId, rId, inputText);
         if (res.update) {
             updateUserInfo();
             return void 0;
@@ -44,7 +48,14 @@ const ReviewList: FC<Props> = props => {
         if (res.audit) {
             toast("您的评论在审核中，请等待审核");
         } else {
-            props.newReviewHandler(res.id, replyIndex, res.user, inputText, res.series);
+            props.newReviewHandler(
+                res.id,
+                replyIndex,
+                replySubIndex,
+                res.user,
+                inputText,
+                res.series
+            );
         }
         setShowInput(false);
         setInputText("");
@@ -54,14 +65,57 @@ const ReviewList: FC<Props> = props => {
         setInputText("");
     };
 
-    const startReview = (index: number) => {
+    const startReview = (index: number, subIndex: number) => {
         if (data.user === 0) {
             toast("您处于游客状态，请在山科小站中操作");
             return void 0;
         }
         setReplyIndex(index);
+        setReplySubIndex(subIndex);
         setShowInput(true);
     };
+
+    const ReviewBlock = (item: Omit<ReviewItem, "children">, index: number, subIndex = -1) => (
+        <>
+            <div className="a-y-center a-flex-space-between a-mt-8">
+                <div className="a-y-center">
+                    <img className={styles.avatar + " a-mr-6"} src={item.avatar_url} alt="" />
+                    <div>{item.nick_name}</div>
+                </div>
+                <div>#{item.series}</div>
+            </div>
+            <div className="a-lmt a-ml">
+                {item.r_id === 0 ? (
+                    item.review
+                ) : (
+                    <>
+                        <span className="a-color-blue">
+                            @ {props.reviewIdNameMap[item.r_id] || "已删除"} :
+                        </span>
+                        <span>{item.review}</span>
+                    </>
+                )}
+            </div>
+            <div className="a-flex-space-between a-lmt a-ml">
+                <div>{item.review_time}</div>
+                <div className="a-link a-y-center">
+                    <div className="a-lml" onClick={() => startReview(index, subIndex)}>
+                        回复
+                    </div>
+                    {item.mine ? (
+                        <div className="a-lml">删除</div>
+                    ) : (
+                        <div
+                            className="a-lml"
+                            onClick={() => report(item.id, "review", item.review)}
+                        >
+                            举报
+                        </div>
+                    )}
+                </div>
+            </div>
+        </>
+    );
 
     return (
         <>
@@ -71,45 +125,24 @@ const ReviewList: FC<Props> = props => {
                     <>
                         <div className="a-y-center a-flex-space-between a-pt a-pb">
                             <div>全部评论</div>
-                            <div className="a-link" onClick={() => startReview(-1)}>
+                            <div className="a-link" onClick={() => startReview(-1, -1)}>
                                 写评论
                             </div>
                         </div>
                         <div className="a-hr"></div>
                         {props.reviews.map((item, index) => (
                             <div key={item.id}>
-                                <div className="a-y-center a-flex-space-between a-mt-8">
-                                    <div className="a-y-center">
-                                        <img
-                                            className={styles.avatar + " a-mr-6"}
-                                            src={item.avatar_url}
-                                            alt=""
-                                        />
-                                        <div>{item.nick_name}</div>
+                                {ReviewBlock(item, index)}
+                                {item.children.map((subItem, subIndex) => (
+                                    <div
+                                        key={subItem.id}
+                                        className={
+                                            "a-lml a-background-grey a-mt " + styles.padding_block
+                                        }
+                                    >
+                                        {ReviewBlock(subItem, index, subIndex)}
                                     </div>
-                                    <div>#{item.series}</div>
-                                </div>
-                                <div className="a-lmt a-ml">{item.review}</div>
-                                <div className="a-flex-space-between a-lmt a-ml">
-                                    <div>{item.review_time}</div>
-                                    <div className="a-link a-y-center">
-                                        <div className="a-lml" onClick={() => startReview(index)}>
-                                            回复
-                                        </div>
-                                        {item.mine ? (
-                                            <div className="a-lml">删除</div>
-                                        ) : (
-                                            <div
-                                                className="a-lml"
-                                                onClick={() =>
-                                                    report(item.id, "review", item.review)
-                                                }
-                                            >
-                                                举报
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                                ))}
                                 <div className="a-hr"></div>
                             </div>
                         ))}

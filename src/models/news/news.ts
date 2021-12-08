@@ -63,6 +63,7 @@ type ResponseReviewItem = {
     series: number;
     mine?: boolean;
     review_time: string;
+    f_id: number;
     r_id: number;
 };
 
@@ -72,11 +73,18 @@ export type ReviewItem = ResponseReviewItem & {
 };
 
 export const fetchNewsDetail = (id: number) => {
-    return new Promise<{ detail: NewsDetail; reviews: ReviewItem[]; praised: boolean }>(resolve => {
+    return new Promise<{
+        detail: NewsDetail;
+        reviews: ReviewItem[];
+        praised: boolean;
+        reviewIdNameMap: Record<string, string>;
+    }>(resolve => {
         request<{ detail: NewsDetail; reviews: ResponseReviewItem[]; praised: boolean }>({
             url: data.url + `/news/home/getDetail/${id}`,
         })
             .then(res => {
+                const reviewIdNameMap: Record<string, string> = {};
+                res.reviews.forEach(item => (reviewIdNameMap[item.id] = item.nick_name));
                 resolve({
                     ...res,
                     detail: {
@@ -84,11 +92,12 @@ export const fetchNewsDetail = (id: number) => {
                         imgs: res.detail.img_url.split(","),
                     },
                     reviews: res.reviews
-                        .filter(item => item.r_id === 0)
+                        .filter(item => item.f_id === 0)
                         .map(item => ({
                             ...item,
-                            children: res.reviews.filter(innerItem => innerItem.r_id === item.id),
+                            children: res.reviews.filter(innerItem => innerItem.f_id === item.id),
                         })),
+                    reviewIdNameMap,
                 });
             })
             .catch(() => {
