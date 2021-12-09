@@ -3,11 +3,14 @@ import { LoadingOutlined } from "@ant-design/icons";
 import ReactDOM from "react-dom";
 
 let counter = 0;
+let startTimestamp = 0;
+const minLoadingGap = 300;
 /**
  * start
  */
 const start = (title = "加载中..."): void => {
     if (counter === 0) {
+        startTimestamp = new Date().getTime();
         const container = document.createElement("div");
         container.setAttribute("id", "global-spin-element");
         document.body.appendChild(container);
@@ -25,14 +28,18 @@ const start = (title = "加载中..."): void => {
 const end = (): void => {
     counter--;
     if (counter === 0) {
-        const loadingNode = document.getElementById("global-spin-element");
-        if (loadingNode) {
-            loadingNode.classList.add("global-spin-element-hide");
-            // loadingNode.addEventListener("transitionend", () => {
-            //     document.body.removeChild(loadingNode);
-            // });
-            setTimeout(() => document.body.removeChild(loadingNode), 500);
-        }
+        const gapTimestamp = new Date().getTime() - startTimestamp;
+        const endLoading = () => {
+            const loadingNode = document.getElementById("global-spin-element");
+            if (loadingNode) {
+                loadingNode.classList.add("global-spin-element-hide");
+                loadingNode.addEventListener("animationend", () => {
+                    document.body.removeChild(loadingNode);
+                });
+            }
+        };
+        if (gapTimestamp > minLoadingGap) endLoading();
+        else setTimeout(endLoading, minLoadingGap);
     }
 };
 

@@ -1,9 +1,6 @@
 import { FC } from "react";
 import NewsRouter from "src/views/news";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import "src/App.css";
-import "src/vector/styles/asse.scss";
-import "src/vector/styles/asse-style.scss";
 import { Row, Col } from "antd";
 
 const App: FC = () => (
