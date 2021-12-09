@@ -30,3 +30,14 @@ export const publishNews = (
             });
     });
 };
+
+export const deleteNews = async (id: number) => {
+    return request<{ status: number }>({
+        url: data.url + "/news/publish/deletePost",
+        method: "POST",
+        data: { id },
+    }).catch(() => {
+        toast("删除失败，请稍后重试", "error");
+        return { status: 0 };
+    });
+};

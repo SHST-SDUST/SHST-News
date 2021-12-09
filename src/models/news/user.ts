@@ -41,7 +41,7 @@ export const fetchMyNewsList = (page: number) => {
     type Response = { list: Omit<MyNewsItem, keyof User>[]; user: User };
     return new Promise<{ list: MyNewsItem[] }>(resolve => {
         request<Response>({
-            url: data.url + `/news/home/getNews/${page}`,
+            url: data.url + `/news/my/getMyNews/${page}`,
         })
             .then(res => ({
                 list: res.list.map(item => ({

@@ -9,6 +9,7 @@ import { updateUserInfo } from "src/utils/mini-program";
 import { report } from "src/utils/feedback";
 import { data } from "src/modules/global-data";
 import { User } from "src/models/common/constant";
+import { throttle } from "src/modules/operate-limit";
 interface Props {
     reviews: ReviewItem[];
     className?: string;
@@ -31,7 +32,7 @@ const ReviewList: FC<Props> = props => {
     const [replyIndex, setReplyIndex] = useState(-1);
     const [replySubIndex, setReplySubIndex] = useState(-1);
 
-    const confirmModal: ModalProps["onOk"] = async () => {
+    const confirmModal: ModalProps["onOk"] = () => {
         if (!inputText) {
             toast("请输入内容");
             return void 0;
@@ -40,27 +41,30 @@ const ReviewList: FC<Props> = props => {
             toast("评论内容不能大于100字");
             return void 0;
         }
-        const fId = replyIndex === -1 ? 0 : props.reviews[replyIndex].id;
-        const rId = replySubIndex === -1 ? 0 : props.reviews[replyIndex].children[replySubIndex].id;
-        const res = await postReview(props.id, fId, rId, inputText);
-        if (res.update) {
-            updateUserInfo();
-            return void 0;
-        }
-        if (res.audit) {
-            toast("您的评论在审核中，请等待审核");
-        } else {
-            props.newReviewHandler(
-                res.id,
-                replyIndex,
-                replySubIndex,
-                res.user,
-                inputText,
-                res.series
-            );
-        }
-        setShowInput(false);
-        setInputText("");
+        throttle(500, async () => {
+            const fId = replyIndex === -1 ? 0 : props.reviews[replyIndex].id;
+            const rId =
+                replySubIndex === -1 ? 0 : props.reviews[replyIndex].children[replySubIndex].id;
+            const res = await postReview(props.id, fId, rId, inputText);
+            if (res.update) {
+                updateUserInfo();
+                return void 0;
+            }
+            if (res.audit) {
+                toast("您的评论在审核中，请等待审核");
+            } else {
+                props.newReviewHandler(
+                    res.id,
+                    replyIndex,
+                    replySubIndex,
+                    res.user,
+                    inputText,
+                    res.series
+                );
+            }
+            setShowInput(false);
+            setInputText("");
+        });
     };
     const cancelModal: ModalProps["onCancel"] = () => {
         setShowInput(false);

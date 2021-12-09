@@ -21,6 +21,7 @@ export const report = (id: number, type: "post" | "review", content: string) => 
                 })
                 .catch(() => {
                     toast("操作失败，请稍后重试", "info");
+                    return { status: 0 };
                 });
         }
     });

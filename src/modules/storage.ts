@@ -1,4 +1,4 @@
-import { safeDate } from "./datetime.js";
+import { safeDate } from "./datetime";
 
 const convertKey = (key: string) => String(key).replace(/-storage$/g, "") + "-storage"; // 避免跟之前没有封装的缓存冲突
 
@@ -25,8 +25,8 @@ const convertToStr = <T = string>(origin: T, expire?: Date | null) => {
     return JSON.stringify(data);
 };
 
-export default (type: "local" | "session" = "local") => {
-    const storage = type === "local" ? window.localStorage : window.sessionStorage;
+export default (type: "local" | "session" | "s" | "l" = "local") => {
+    const storage = type === "local" || type === "l" ? window.localStorage : window.sessionStorage;
     return {
         has: function (originKey: string): boolean {
             const key = convertKey(originKey);

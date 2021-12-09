@@ -12,6 +12,7 @@ import { Skeleton } from "antd";
 import Card from "src/components/card";
 import { formatDate } from "src/modules/datetime";
 import { User } from "src/models/common/constant";
+import { throttle } from "src/modules/operate-limit";
 
 const Detail: FC = () => {
     const { id } = useParams();
@@ -33,20 +34,22 @@ const Detail: FC = () => {
         setReviews(res.reviews);
         setReviewIdNameMap(res.reviewIdNameMap);
     };
-    const likeOperate = async () => {
+    const likeOperate = () => {
         if (data.user === 0) {
             toast("您处于游客状态，请在山科小站中操作");
             return void 0;
         }
-        const toLike = !praised;
-        const res = await postLike(Number(id), toLike);
-        if (res.status === 1) {
-            setPraised(toLike);
-            setNewsDetail({
-                ...newsDetail,
-                praise: Number(newsDetail.praise) + (toLike ? 1 : -1),
-            });
-        }
+        throttle(500, async () => {
+            const toLike = !praised;
+            const res = await postLike(Number(id), toLike);
+            if (res.status === 1) {
+                setPraised(toLike);
+                setNewsDetail({
+                    ...newsDetail,
+                    praise: Number(newsDetail.praise) + (toLike ? 1 : -1),
+                });
+            }
+        });
     };
 
     const newReviewHandler = (

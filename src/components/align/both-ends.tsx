@@ -8,7 +8,7 @@ interface Props {
 
 const BothEnds: FC<Props> = props => {
     return (
-        <div className={"a-flex-space-between" + props.className}>
+        <div className={"a-flex-space-between " + props.className}>
             <div>{props.left}</div>
             <div>{props.right}</div>
         </div>

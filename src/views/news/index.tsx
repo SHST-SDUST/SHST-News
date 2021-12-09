@@ -4,14 +4,14 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import NotFound from "../system/NotFound";
 import MyNewsList from "./mine/news";
 import Detail from "./detail";
-import { data } from "src/modules/global-data";
 import { AliveScope, KeepAlive } from "react-activation";
 import { useState, useEffect } from "react";
 import eventBus from "src/modules/event-bus";
 import Notice from "./mine/notice";
+import storage from "src/modules/storage";
 
 const NewsRouter = (): JSX.Element => {
-    const [userStatus, setUserStatus] = useState(data.user);
+    const [userStatus, setUserStatus] = useState(Number(storage("s").get("user-login") || 0));
     const RedirectIndex = <Navigate replace={true} to="/" />;
 
     useEffect(() => {
