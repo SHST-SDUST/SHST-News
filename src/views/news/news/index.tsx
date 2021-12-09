@@ -9,7 +9,6 @@ import NewsListItem from "../components/news-list-item";
 import Loading, { Props as LoadingProps } from "src/components/loading";
 import Overhead from "./overhead";
 import { useRoutePath } from "src/utils/useRouter";
-import loadingMask from "src/modules/loading";
 
 const NewsIndex: React.FC = () => {
     const nav = useRoutePath();
@@ -27,23 +26,19 @@ const NewsIndex: React.FC = () => {
     };
 
     useEffect(() => {
-        loadingMask.start();
         setNewsList([]);
         setOverheadList([]);
-        Promise.all([
-            loadOverhead(activeTabIndex, false),
-            loadNews(activeTabIndex, 1, subActiveTabIndex, false),
-        ]).finally(loadingMask.end);
+        Promise.all([loadOverhead(activeTabIndex), loadNews(activeTabIndex, 1, subActiveTabIndex)]);
     }, [activeTabIndex, subActiveTabIndex]);
 
-    const loadOverhead = async (index: number, load = true) => {
-        const res = await fetchOverhead(index, load);
+    const loadOverhead = async (index: number) => {
+        const res = await fetchOverhead(index, false);
         setOverheadList(res.list);
     };
 
-    const loadNews = async (type: number, page: number, subType: number, load = true) => {
+    const loadNews = async (type: number, page: number, subType: number) => {
         setLoading("loading");
-        const res = await fetchNewsList(page, type, subType, load);
+        const res = await fetchNewsList(page, type, subType, false);
         setPage(page);
         setNewsList(newsList => newsList.concat(res.list));
         if (res.list.length < 10) setLoading("nomore");

@@ -8,6 +8,7 @@ export const fetchNoticeList = (page: number) => {
     type Response = { list: ResponseNoticeItem[] };
     return new Promise<WrapperResponse<{ list: NoticeItem[] }>>(resolve => {
         request<Response>({
+            load: false,
             url: data.url + "/news/notice/getNotice/",
             param: { page },
         })

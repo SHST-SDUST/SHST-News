@@ -12,6 +12,7 @@ export const fetchUserInfo = () => {
     };
     return new Promise<WrapperResponse<Response>>(resolve => {
         request<Response>({
+            load: false,
             url: data.url + "/news/home/getUserInfo",
         })
             .then(res => resolve(res))
@@ -26,6 +27,7 @@ export const fetchUserStatus = () => {
     type Response = { info: "" | "tourist" };
     return new Promise<WrapperResponse<Response>>(resolve => {
         request<Response>({
+            load: false,
             url: data.url + "/news/home/getUserStatus",
         })
             .then(res => resolve(res))
@@ -41,6 +43,7 @@ export const fetchMyNewsList = (page: number) => {
     type Response = { list: Omit<MyNewsItem, keyof User>[]; user: User };
     return new Promise<{ list: MyNewsItem[] }>(resolve => {
         request<Response>({
+            load: false,
             url: data.url + `/news/my/getMyNews/${page}`,
         })
             .then(res => ({
