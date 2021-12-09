@@ -13,7 +13,7 @@ import { confirm, toast } from "src/modules/toast";
 
 const NewsIndex: React.FC = () => {
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState<LoadingProps["loading"]>("loadmore");
+    const [loading, setLoading] = useState<LoadingProps["loading"]>("loading");
     const [newsList, setNewsList] = useState<MyNewsItem[]>([]);
 
     useEffect(() => {
@@ -21,6 +21,7 @@ const NewsIndex: React.FC = () => {
     }, []);
 
     const loadNews = async (page: number) => {
+        setLoading("loading");
         const res = await fetchMyNewsList(page);
         setPage(page);
         setNewsList(newsList => newsList.concat(res.list));

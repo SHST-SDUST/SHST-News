@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const Notice: FC = () => {
     const nav = useNavigate();
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState<LoadingProps["loading"]>("loadmore");
+    const [loading, setLoading] = useState<LoadingProps["loading"]>("loading");
     const [noticeList, setNoticeList] = useState<NoticeItem[]>([]);
 
     useEffect(() => {
@@ -18,6 +18,7 @@ const Notice: FC = () => {
     }, []);
 
     const loadNotices = async (page: number) => {
+        setLoading("loading");
         const res = await fetchNoticeList(page);
         setPage(page);
         setNoticeList(noticeList => noticeList.concat(res.list));

@@ -41,7 +41,7 @@ export const request = <T>(requestInfo: RequestInfo) => {
     const requestConfig = extend<RequestOptionsAllNeeded>(defaultOptions, requestInfo);
     return new Promise<WrapperResponse<T>>((resolve, reject) => {
         const runRequest = () => {
-            loading.start();
+            if (requestConfig.load) loading.start();
             console.log("Request for", requestConfig.url);
             axios
                 .request<WrapperResponse<T>>({
@@ -70,7 +70,7 @@ export const request = <T>(requestInfo: RequestInfo) => {
                     }
                 })
                 .finally(() => {
-                    loading.end();
+                    if (requestConfig.load) loading.end();
                 });
         };
         if (requestConfig.debounce > 0) debounce(requestConfig.debounce, () => runRequest());

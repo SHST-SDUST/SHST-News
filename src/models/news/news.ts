@@ -17,9 +17,10 @@ export type NewsItem = {
     imgs: string[];
 };
 
-export const fetchNewsList = (page: number, type: number, subType: number) => {
+export const fetchNewsList = (page: number, type: number, subType: number, load = true) => {
     type Response = { list: NewsItem[] };
     return request<Response>({
+        load,
         url: data.url + `/news/home/getNews/${type}/${page}`,
         param: {
             sub_type: subType,
@@ -42,9 +43,10 @@ export type OverheadItem = {
     id: number;
 };
 
-export const fetchOverhead = (type: number) => {
+export const fetchOverhead = (type: number, load = true) => {
     type Response = { list: OverheadItem[] };
     return request<Response>({
+        load,
         url: data.url + `/news/home/getOverhead/${type}`,
     }).catch(() => {
         toast("获取顶置信息失败，请稍后重试", "error");
@@ -80,6 +82,7 @@ export const fetchNewsDetail = (id: number) => {
         reviewIdNameMap: Record<string, string>;
     }>(resolve => {
         request<{ detail: NewsDetail; reviews: ResponseReviewItem[]; praised: boolean }>({
+            load: false,
             url: data.url + `/news/home/getDetail/${id}`,
         })
             .then(res => {

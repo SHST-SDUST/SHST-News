@@ -38,9 +38,9 @@ const end = (): void => {
                 });
             }
         };
-        if (gapTimestamp > minLoadingGap) endLoading();
-        else setTimeout(endLoading, minLoadingGap);
+        setTimeout(endLoading, gapTimestamp > minLoadingGap ? 0 : minLoadingGap);
     }
+    if (counter < 0) counter = 0;
 };
 
 export default { start, end };

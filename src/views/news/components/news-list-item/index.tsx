@@ -15,7 +15,11 @@ const NewsListItem: FC<NewsItem> = props => (
         {props.host && (
             <div className="a-y-center a-mt-8">
                 <div className={"a-x-center " + styles.image_container}>
-                    <img src={props.host + "public/upload/" + props.imgs[0]} alt="" />
+                    <img
+                        className="ant-image-img"
+                        src={props.host + "public/upload/" + props.imgs[0]}
+                        alt=""
+                    />
                 </div>
             </div>
         )}

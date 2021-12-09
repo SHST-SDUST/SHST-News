@@ -9,38 +9,41 @@ import NewsListItem from "../components/news-list-item";
 import Loading, { Props as LoadingProps } from "src/components/loading";
 import Overhead from "./overhead";
 import { useRoutePath } from "src/utils/useRouter";
+import loadingMask from "src/modules/loading";
 
 const NewsIndex: React.FC = () => {
     const nav = useRoutePath();
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState<LoadingProps["loading"]>("loadmore");
+    const [loading, setLoading] = useState<LoadingProps["loading"]>("loading");
     const [activeTabIndex, setActiveTabIndex] = useState(0);
     const [subActiveTabIndex, setSubActiveTabIndex] = useState(0);
     const [newsList, setNewsList] = useState<NewsItem[]>([]);
     const [overheadList, setOverheadList] = useState<OverheadItem[]>([]);
 
-    useEffect(() => {
-        loadOverhead(activeTabIndex);
-        loadNews(activeTabIndex, 1, subActiveTabIndex);
-    }, []);
-
     const switchTab = (index: number, subIndex: number, type: 1 | 2): void => {
         if (type === 1) subIndex = 0; // 点击的`Tab`是`1`级则重置`2`级标签
-        setNewsList([]);
-        setOverheadList([]);
         setActiveTabIndex(index);
         setSubActiveTabIndex(subIndex);
-        loadNews(index, 1, subIndex);
-        loadOverhead(index);
     };
 
-    const loadOverhead = async (index: number) => {
-        const res = await fetchOverhead(index);
+    useEffect(() => {
+        loadingMask.start();
+        setNewsList([]);
+        setOverheadList([]);
+        Promise.all([
+            loadOverhead(activeTabIndex, false),
+            loadNews(activeTabIndex, 1, subActiveTabIndex, false),
+        ]).finally(loadingMask.end);
+    }, [activeTabIndex, subActiveTabIndex]);
+
+    const loadOverhead = async (index: number, load = true) => {
+        const res = await fetchOverhead(index, load);
         setOverheadList(res.list);
     };
 
-    const loadNews = async (type: number, page: number, subType: number) => {
-        const res = await fetchNewsList(page, type, subType);
+    const loadNews = async (type: number, page: number, subType: number, load = true) => {
+        setLoading("loading");
+        const res = await fetchNewsList(page, type, subType, load);
         setPage(page);
         setNewsList(newsList => newsList.concat(res.list));
         if (res.list.length < 10) setLoading("nomore");
