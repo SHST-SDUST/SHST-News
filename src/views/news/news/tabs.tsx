@@ -58,7 +58,9 @@ const Tabs: React.FC<Props> = props => {
     return (
         <div className="a-pointer ">
             <div className={"a-y-center a-background-white " + styles["tab-container"]}>
-                <div className={"a-y-center a-pl-5 a-pr-5 " + styles["overflow-x-auto"]}>
+                <div
+                    className={"a-y-center a-pl-5 a-pr-5 a-flex-full " + styles["overflow-x-auto"]}
+                >
                     {TABS.map(item => (
                         <div
                             key={item.index}

@@ -7,7 +7,7 @@ import { typeList, subTypeListMapper } from "../common/type-group";
 import { data } from "src/modules/global-data";
 import { toast } from "src/modules/toast";
 import loading from "src/modules/loading";
-import { publishNews } from "src/models/news/publish";
+import { publishNews } from "src/models/news/post";
 import { updateUserInfo } from "src/utils/mini-program";
 import { useNavigate } from "react-router-dom";
 import { throttle } from "src/modules/operate-limit";

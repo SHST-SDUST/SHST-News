@@ -4,7 +4,7 @@ import styles from "./index.module.scss";
 import { Modal, Input, ModalProps, Empty } from "antd";
 import Card from "src/components/card";
 import { toast } from "src/modules/toast";
-import { postReview } from "src/models/news/publish";
+import { postReview } from "src/models/news/review";
 import { updateUserInfo } from "src/utils/mini-program";
 import { report } from "src/utils/feedback";
 import { data } from "src/modules/global-data";
