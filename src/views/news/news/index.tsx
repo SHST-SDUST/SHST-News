@@ -66,7 +66,7 @@ const NewsIndex: React.FC = () => {
                 ))}
             </div>
             <div
-                onClick={() => nav("publish", true)}
+                onClick={() => nav("publish")}
                 className={"a-x-center a-y-center " + styles["new-post-container"]}
             >
                 <PlusOutlined style={{ fontSize: "20px" }} />

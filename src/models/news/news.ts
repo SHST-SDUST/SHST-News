@@ -88,7 +88,7 @@ export const fetchNewsDetail = (id: number) => {
             .then(res => {
                 const reviewIdNameMap: Record<string, string> = {};
                 res.reviews.forEach(item => (reviewIdNameMap[item.id] = item.nick_name));
-                resolve({
+                const rtn = {
                     ...res,
                     detail: {
                         ...res.detail,
@@ -101,7 +101,9 @@ export const fetchNewsDetail = (id: number) => {
                             children: res.reviews.filter(innerItem => innerItem.f_id === item.id),
                         })),
                     reviewIdNameMap,
-                });
+                };
+                rtn.reviews.forEach(item => item.children.sort((a, b) => a.id - b.id));
+                resolve(rtn);
             })
             .catch(() => {
                 toast("获取详情信息失败，请稍后重试", "error");

@@ -15,5 +15,6 @@ $image-matrix: 100px;
 .image_container_hide{
     @extend .image_container;
     border: none;
+    // :global{ .ant-upload {...}}
 }
 

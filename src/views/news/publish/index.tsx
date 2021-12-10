@@ -22,6 +22,10 @@ const NewsPublish = (): JSX.Element => {
     const [imagePaths, setImagePaths] = React.useState<{ url: string; path: string }[]>([]);
 
     const beforeUpload: UploadProps["beforeUpload"] = file => {
+        if (file.type !== "image/jpeg") {
+            toast("仅允许上传jpg格式的图片");
+            return Promise.reject(false);
+        }
         loading.start("上传中...");
         return new Promise((resolve, reject) => {
             const limit = file.size / 1024 < 100; // 判断图片是否过大 100kb
@@ -136,7 +140,6 @@ const NewsPublish = (): JSX.Element => {
                     ))}
                     {imagePaths.length < IMAGE_LENGTH && (
                         <Upload
-                            accept=".jpg"
                             name="image"
                             showUploadList={false}
                             action={data.url + "/news/publish/uploadImg"}
