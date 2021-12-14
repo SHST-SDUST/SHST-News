@@ -1,11 +1,11 @@
 import React from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
 import { Form, Input, Radio, Button, Upload, Image, FormProps, UploadProps } from "antd";
 import { compressAccurately } from "image-conversion";
 import styles from "./index.module.scss";
 import { typeList, subTypeListMapper } from "../common/type-group";
 import { data } from "src/modules/global-data";
-import { toast } from "src/modules/toast";
+import { confirm, toast } from "src/modules/toast";
 import loading from "src/modules/loading";
 import { publishNews } from "src/models/news/post";
 import { updateUserInfo } from "src/utils/mini-program";
@@ -88,6 +88,15 @@ const NewsPublish = (): JSX.Element => {
             }
         }
     };
+
+    const deleteImgItem = async (index: number) => {
+        const choice = await confirm("提示", "确定要移除这张图片吗");
+        if (choice) {
+            imagePaths.splice(index, 1);
+            setImagePaths([...imagePaths]);
+        }
+    };
+
     return (
         <div className={"a-background-white full-page " + styles.container}>
             <Form onFinish={onFinish} layout="vertical">
@@ -131,11 +140,14 @@ const NewsPublish = (): JSX.Element => {
                 )}
                 <div className="a-x-center y-center a-flex-space-around">
                     {imagePaths.map((item, index) => (
-                        <div
-                            key={index}
-                            className={"a-flex-space-around " + styles.image_container}
-                        >
-                            <Image src={item.url} wrapperClassName="a-x-center" alt="" />
+                        <div key={index} className="a-position-relative">
+                            <div className={"a-flex-space-around " + styles.image_container}>
+                                <Image src={item.url} wrapperClassName="a-x-center" alt="" />
+                            </div>
+                            <CloseOutlined
+                                className={"a-x-center a-y-center " + styles.close}
+                                onClick={() => deleteImgItem(index)}
+                            />
                         </div>
                     ))}
                     {imagePaths.length < IMAGE_LENGTH && (

@@ -1,3 +1,5 @@
+@import "src/vector/styles/asse.scss";
+
 $image-matrix: 100px;
 
 .container{
@@ -18,3 +20,15 @@ $image-matrix: 100px;
     // :global{ .ant-upload {...}}
 }
 
+.close{
+    color: #fff !important;
+    font-size: 11px;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    z-index: 100;
+    border-radius: 50%;
+    background-color: $a-font-grey;
+}
