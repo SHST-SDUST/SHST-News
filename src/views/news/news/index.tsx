@@ -19,17 +19,24 @@ const NewsIndex: React.FC = () => {
     const [newsList, setNewsList] = useState<NewsItem[]>([]);
     const [overheadList, setOverheadList] = useState<OverheadItem[]>([]);
 
+    useEffect(() => {
+        setNewsList([]);
+        setOverheadList([]);
+        loadOverhead(activeTabIndex);
+        loadNews(activeTabIndex, 1, subActiveTabIndex);
+    }, []);
+
     const switchTab = (index: number, subIndex: number, type: 1 | 2): void => {
         if (type === 1) subIndex = 0; // 点击的`Tab`是`1`级则重置`2`级标签
         setActiveTabIndex(index);
         setSubActiveTabIndex(subIndex);
-    };
-
-    useEffect(() => {
+        if (type === 1) {
+            setOverheadList([]);
+            loadOverhead(index);
+        }
         setNewsList([]);
-        setOverheadList([]);
-        Promise.all([loadOverhead(activeTabIndex), loadNews(activeTabIndex, 1, subActiveTabIndex)]);
-    }, [activeTabIndex, subActiveTabIndex]);
+        loadNews(index, 1, subIndex);
+    };
 
     const loadOverhead = async (index: number) => {
         const res = await fetchOverhead(index, false);

@@ -152,6 +152,7 @@ const NewsPublish = (): JSX.Element => {
                     ))}
                     {imagePaths.length < IMAGE_LENGTH && (
                         <Upload
+                            accept="image/jpeg"
                             name="image"
                             showUploadList={false}
                             action={data.url + "/news/publish/uploadImg"}
