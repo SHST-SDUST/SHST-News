@@ -34,6 +34,7 @@ const end = (): void => {
             if (loadingNode) {
                 loadingNode.classList.add("global-spin-element-hide");
                 loadingNode.addEventListener("animationend", () => {
+                    ReactDOM.unmountComponentAtNode(loadingNode);
                     document.body.removeChild(loadingNode);
                 });
             }
