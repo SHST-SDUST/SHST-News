@@ -11,7 +11,7 @@ const NewsListItem: FC<NewsItem> = props => (
             <img className={styles.avatar + " a-mr-6"} src={props.avatar_url} alt="" />
             <div>{props.nick_name}</div>
         </div>
-        <div className="a-mt-8">{props.content}</div>
+        <div className={"a-mt-8 " + styles.content}>{props.content}</div>
         {props.host && (
             <div className="a-y-center a-mt-8">
                 <div className={"a-x-center " + styles.image_container}>
