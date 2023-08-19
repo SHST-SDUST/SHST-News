@@ -30,7 +30,7 @@ const DetailItem: FC<Props & Partial<NewsDetail>> = props => (
             </div>
         </div>
         <div className="a-mt-8 a-fontsize-12">{props.create_time}</div>
-        <div className="a-lmt">{props.content}</div>
+        <div className={"a-lmt " + styles.content}>{props.content}</div>
         {props.host && (
             <div className="a-y-center a-flex-space-between a-mt-8">
                 <>
